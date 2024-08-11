@@ -8,4 +8,5 @@ class SupportServerApplication
 
 fun main(args: Array<String>) {
 	runApplication<SupportServerApplication>(*args)
+	println("#####서버 가동 완료#####")
 }

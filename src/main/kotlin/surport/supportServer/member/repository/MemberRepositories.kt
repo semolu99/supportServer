@@ -1,6 +1,6 @@
-package member.repository
+package surport.supportServer.member.repository
 
-import member.entity.Member
+import surport.supportServer.member.entity.Member
 import org.springframework.data.jpa.repository.JpaRepository
 
 interface MemberRepository : JpaRepository<Member, Long> {

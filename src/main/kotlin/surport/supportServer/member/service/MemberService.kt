@@ -1,9 +1,9 @@
-package member.service
+package surport.supportServer.member.service
 
 import jakarta.transaction.Transactional
-import member.dto.MemberDtoRequest
-import member.entity.Member
-import member.repository.MemberRepository
+import surport.supportServer.member.dto.MemberDtoRequest
+import surport.supportServer.member.entity.Member
+import surport.supportServer.member.repository.MemberRepository
 import org.springframework.stereotype.Service
 
 @Transactional

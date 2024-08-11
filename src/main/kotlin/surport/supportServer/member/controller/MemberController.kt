@@ -1,7 +1,8 @@
-package member.controller
+package surport.supportServer.member.controller
 
-import member.dto.MemberDtoRequest
-import member.service.MemberService
+import surport.supportServer.member.dto.MemberDtoRequest
+import surport.supportServer.member.service.MemberService
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.RestController
 class MemberController(
     private val memberService: MemberService
 ) {
+    @GetMapping("/hello")
+    fun hello():String{
+        return "hello"
+    }
     /**
      * 회원가입
      */

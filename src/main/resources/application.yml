@@ -9,19 +9,20 @@ server:
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/supportTest?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-    username: supportTest
+    url: jdbc:mysql://localhost:3306/support_test?serverTimezone=Asia/Seoul
+    username: supportTester
     password: qwer1234*
 
   jpa:
-    open-in-view: true
     hibernate:
       ddl-auto: create
+    show-sql: true
     properties:
       hibernate:
-        show_sql: false
         format_sql: true
+        show_sql: false
         highlight_sql: true
+    open-in-view: true
 
 logging:
   pattern:
@@ -29,5 +30,5 @@ logging:
   level:
     org:
       hibernate:
-        SQL: debug
         type.descriptor.sql: trace
+        SQL: debug

@@ -1,7 +1,7 @@
-package member.entity
+package surport.supportServer.member.entity
 
-import common.status.Dorm_type
-import common.status.Gender
+import surport.supportServer.common.status.Dorm_type
+import surport.supportServer.common.status.Gender
 import jakarta.persistence.*
 
 @Entity

@@ -1,4 +1,4 @@
-package common.status
+package surport.supportServer.common.status
 
 enum class Gender(val desc: String) {
     MAN("남"),
