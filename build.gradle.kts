@@ -1,9 +1,10 @@
 plugins {
-	kotlin("jvm") version "1.9.24"
-	kotlin("plugin.spring") version "1.9.24"
+	val kotlinVersion = "1.9.24"
 	id("org.springframework.boot") version "3.3.2"
 	id("io.spring.dependency-management") version "1.1.6"
-	kotlin("plugin.jpa") version "1.9.24"
+	kotlin("jvm") version kotlinVersion
+	kotlin("plugin.spring") version kotlinVersion
+	kotlin("plugin.jpa") version kotlinVersion
 }
 
 group = "surport"
@@ -31,6 +32,14 @@ dependencies {
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 	testImplementation("org.springframework.security:spring-security-test")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+allOpen{
+	annotation("jakarta.persistence.Entity")
+}
+
+noArg {
+	annotation("jakarta.persistence.Entity")
 }
 
 kotlin {
