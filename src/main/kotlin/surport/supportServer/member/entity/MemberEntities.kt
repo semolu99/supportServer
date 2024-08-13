@@ -3,6 +3,7 @@ package surport.supportServer.member.entity
 import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
 import jakarta.persistence.*
+import jakarta.validation.constraints.Min
 
 @Entity
 @Table(
@@ -34,8 +35,9 @@ class Member(
     val dormType: Dorm_type,
 
     @Column(nullable = false)
+    @Min(value = 1)
     val dormNo: Int,
 
-    @Column(nullable = false)
-    val roomNo: Int? = 0,
+    @Column(nullable = true)
+    val roomNo: Int? = null,
 )

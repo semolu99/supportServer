@@ -1,5 +1,6 @@
 package surport.supportServer.member.controller
 
+import jakarta.validation.Valid
 import surport.supportServer.member.dto.MemberDtoRequest
 import surport.supportServer.member.service.MemberService
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,15 +14,11 @@ import org.springframework.web.bind.annotation.RestController
 class MemberController(
     private val memberService: MemberService
 ) {
-    @GetMapping("/hello")
-    fun hello():String{
-        return "hello"
-    }
     /**
      * 회원가입
      */
     @PostMapping("/signup")
-    fun signUp(@RequestBody memberDtoRequest: MemberDtoRequest): String{
+    fun signUp(@RequestBody @Valid memberDtoRequest: MemberDtoRequest): String{
         return memberService.signUp(memberDtoRequest)
     }
 }
