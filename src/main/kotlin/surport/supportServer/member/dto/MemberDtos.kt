@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Pattern
 import surport.supportServer.common.annotation.ValidEnum
 import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
+import surport.supportServer.member.entity.Member
 
 //회원 가입시 받을 정보? 룸 넘버는 일단 보류
 data class MemberDtoRequest(
@@ -65,4 +66,7 @@ data class MemberDtoRequest(
         get() = _dormNo!!
     val roomNo: Int?
         get() = _roomNo
+
+    fun toEntity(): Member =
+        Member(id, loginId,password,nickname,gender, admin, dormType, dormNo, roomNo)
 }
