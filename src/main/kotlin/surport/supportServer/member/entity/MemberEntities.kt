@@ -4,6 +4,8 @@ import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
 import jakarta.persistence.*
 import jakarta.validation.constraints.Min
+import surport.supportServer.common.status.ROLE
+import surport.supportServer.member.dto.MemberDtoResponse
 
 @Entity
 @Table(
@@ -40,4 +42,25 @@ class Member(
 
     @Column(nullable = true)
     val roomNo: Int? = null,
+) {
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+    val memberRole: List<MemberRole>? = null
+
+    fun toDto(): MemberDtoResponse =
+        MemberDtoResponse(id!!, loginId, nickname, gender.desc, admin, dormType.desc, dormNo, roomNo)
+}
+
+@Entity
+class MemberRole(
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    var id:Long? = null,
+
+    @Column(nullable = false, length = 30)
+    @Enumerated(EnumType.STRING)
+    val role: ROLE,
+
+    @ManyToOne(fetch = FetchType.LAZY) //다대일
+    @JoinColumn(foreignKey = ForeignKey(name = "fk_user_role_member_id"))
+    val member: Member
 )

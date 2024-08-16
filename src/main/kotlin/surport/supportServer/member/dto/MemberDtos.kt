@@ -11,7 +11,7 @@ import surport.supportServer.member.entity.Member
 
 //회원 가입시 받을 정보? 룸 넘버는 일단 보류
 data class MemberDtoRequest(
-    val id: Long?,
+    var id: Long?,
 
     @field:NotBlank
     @JsonProperty("loginId")
@@ -70,3 +70,29 @@ data class MemberDtoRequest(
     fun toEntity(): Member =
         Member(id, loginId,password,nickname,gender, admin, dormType, dormNo, roomNo)
 }
+
+data class LoginDto(
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+
+    @field:NotBlank
+    @JsonProperty("password")
+    private val _password: String?,
+) {
+    val loginId: String
+        get() = _loginId!!
+    val password: String
+        get() = _password!!
+}
+
+data class MemberDtoResponse(
+    val id: Long,
+    val loginId: String,
+    val nickname: String,
+    val gender: String,
+    val admin: Boolean,
+    val dormType: String,
+    val dormNo: Int,
+    val roomNo: Int?,
+)
