@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import jakarta.validation.constraints.Pattern
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
 import surport.supportServer.common.annotation.ValidEnum
 import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
@@ -50,10 +51,12 @@ data class MemberDtoRequest(
     @JsonProperty("roomNo")
     private val _roomNo: Int?,
 ){
+    val encoder = SCryptPasswordEncoder(16,8,1,32,64)
+
     val loginId: String
         get() = _loginId!!
     val password: String
-        get() = _password!!
+        get() = encoder.encode(_password)!!
     val nickname: String
         get() = _nickname!!
     val gender: Gender
@@ -96,3 +99,53 @@ data class MemberDtoResponse(
     val dormNo: Int,
     val roomNo: Int?,
 )
+
+data class PasswordChangeDto(
+    @field:NotBlank(message = "현재 비밀번호를 입력해 주세요")
+    val currentPassword: String,
+
+    @field:NotBlank(message = "새 비밀번호를 입력해 주세요")
+    val newPassword: String
+)
+
+data class MemberUpdateDto(
+    var id: Long,
+
+    @field:NotBlank
+    @JsonProperty("nickname")
+    private val _nickname: String?,
+
+    @field:NotBlank
+    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMEN 중 하나를 선택 해 주세요.")
+    @JsonProperty("gender")
+    private val _gender: String?,
+
+    @field:NotNull
+    @JsonProperty("admin")
+    private val _admin: Boolean?,
+
+    @field:NotBlank
+    @field:ValidEnum(enumClass = Dorm_type::class, message = "알맞은 값을 선택 해 주세요.")
+    @JsonProperty("dormType")
+    private val _dormType: String?,
+
+    @field:NotNull
+    @JsonProperty("dormNo")
+    private val _dormNo: Int?,
+
+    @JsonProperty("roomNo")
+    private val _roomNo: Int?,
+) {
+    val nickname: String?
+        get() = _nickname
+    val gender: Gender?
+        get() = _gender?.let { Gender.valueOf(it) }
+    val admin: Boolean?
+        get() = _admin
+    val dormType: Dorm_type?
+        get() = _dormType?.let { Dorm_type.valueOf(it) }
+    val dormNo: Int?
+        get() = _dormNo
+    val roomNo: Int?
+        get() = _roomNo
+}

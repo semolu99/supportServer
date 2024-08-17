@@ -4,7 +4,6 @@ import jakarta.validation.Valid
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
-import surport.supportServer.member.dto.MemberDtoRequest
 import surport.supportServer.member.service.MemberService
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -14,8 +13,7 @@ import org.springframework.web.bind.annotation.RestController
 import surport.supportServer.common.authority.TokenInfo
 import surport.supportServer.common.dto.BaseResponse
 import surport.supportServer.common.dto.CustomUser
-import surport.supportServer.member.dto.LoginDto
-import surport.supportServer.member.dto.MemberDtoResponse
+import surport.supportServer.member.dto.*
 
 @RequestMapping("/member")
 @RestController
@@ -54,10 +52,19 @@ class MemberController(
      * 내 정보 수정
      */
     @PutMapping("/info")
-    fun saveMyInfo(@RequestBody @Valid memberDtoRequest: MemberDtoRequest): BaseResponse<Unit> {
+    fun saveMyInfo(@RequestBody @Valid memberUpdateDto: MemberUpdateDto): BaseResponse<Unit> {
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
-        memberDtoRequest.id = userId
-        val resultMsg: String = memberService.saveMyInfo(memberDtoRequest)
+        memberUpdateDto.id = userId
+        val resultMsg: String = memberService.saveMyInfo(memberUpdateDto)
         return BaseResponse(message = resultMsg)
     }
+
+    @PutMapping("/info/password")
+    fun changePassword(@RequestBody @Valid passwordChangeDto: PasswordChangeDto): BaseResponse<Unit> {
+        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        val resultMsg = memberService.changePassword(userId, passwordChangeDto.currentPassword, passwordChangeDto.newPassword)
+        return BaseResponse(message = resultMsg)
+    }
+
+
 }

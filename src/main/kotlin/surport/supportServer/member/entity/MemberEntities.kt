@@ -19,29 +19,29 @@ class Member(
     @Column(nullable = false, length = 30, updatable = false)
     val loginId: String,
 
-    @Column(nullable = false, length = 100)
-    val password: String,
+    @Column(nullable = false)
+    var password: String,
 
     @Column(nullable = false, length = 10)
-    val nickname: String,
+    var nickname: String,
 
     @Column(nullable = false, length = 5)
     @Enumerated(EnumType.STRING)
-    val gender: Gender,
+    var gender: Gender,
 
     @Column(nullable = false)
-    val admin: Boolean,
+    var admin: Boolean,
 
     @Column(nullable = false, length = 6)
     @Enumerated(EnumType.STRING)
-    val dormType: Dorm_type,
+    var dormType: Dorm_type,
 
     @Column(nullable = false)
     @Min(value = 1)
-    val dormNo: Int,
+    var dormNo: Int,
 
     @Column(nullable = true)
-    val roomNo: Int? = null,
+    var roomNo: Int? = null,
 ) {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     val memberRole: List<MemberRole>? = null

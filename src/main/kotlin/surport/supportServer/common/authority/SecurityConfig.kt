@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.factory.PasswordEncoderFactories
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -17,6 +18,11 @@ class SecurityConfig(
     private val jwtTokenProvider: JwtTokenProvider
 ) {
     @Bean
+    fun bCryptPasswordEncoder(): BCryptPasswordEncoder{
+        return BCryptPasswordEncoder()
+    }
+
+    @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .httpBasic{it.disable()}
@@ -24,7 +30,8 @@ class SecurityConfig(
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests{
                 it.requestMatchers("/member/signup","/member/login").anonymous()
-                    .requestMatchers("/api/member/**").hasRole("MEMBER")
+                    .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
+                    .requestMatchers("/admin").hasRole("ADMIN")
                     .anyRequest().permitAll()
             }
             .addFilterBefore(
