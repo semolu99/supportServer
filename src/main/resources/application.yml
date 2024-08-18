@@ -7,6 +7,11 @@ server:
       enabled: true
       force: true
 spring:
+  security:
+    user:
+      name: user
+      password: 1234
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/support_test?serverTimezone=Asia/Seoul
@@ -24,6 +29,7 @@ spring:
         highlight_sql: true
     open-in-view: true
 
+
 logging:
   pattern:
     console: "[%d{HH:mm:ss.SSS}][%-5level][%logger.%method:line%line] - %msg%n"
@@ -32,3 +38,5 @@ logging:
       hibernate:
         type.descriptor.sql: trace
         SQL: debug
+jwt:
+  secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFsRhT4YSdSb5SD515ASDASD515sdasdASD5ASD515ASDASDaDSAFAF1169W1sdaw
