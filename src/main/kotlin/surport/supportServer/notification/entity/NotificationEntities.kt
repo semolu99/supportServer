@@ -15,6 +15,6 @@ data class Notification(
 
     val title: String,
     val content: String,
-    val startDate: String,
-    val endDate: String
+    val startDate: LocalDate,
+    val endDate: LocalDate
 )
