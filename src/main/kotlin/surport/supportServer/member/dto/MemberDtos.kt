@@ -9,6 +9,7 @@ import surport.supportServer.common.annotation.ValidEnum
 import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
 import surport.supportServer.member.entity.Member
+import java.time.LocalDate
 
 //회원 가입시 받을 정보? 룸 넘버는 일단 보류
 data class MemberDtoRequest(
@@ -31,7 +32,7 @@ data class MemberDtoRequest(
     private val _nickname: String?,
 
     @field:NotBlank
-    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMEN 중 하나를 선택 해 주세요.")
+    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMAN 중 하나를 선택 해 주세요.")
     @JsonProperty("gender")
     private val _gender: String?,
 
@@ -148,4 +149,35 @@ data class MemberUpdateDto(
         get() = _dormNo
     val roomNo: Int?
         get() = _roomNo
+}
+
+data class MailDto(
+    var id: Long?,
+
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+
+    var authCode: String?,
+
+    var sendDate: LocalDate?
+){
+    val loginId : String
+        get() = _loginId!!
+
+}
+
+data class MailCheckDto(
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+
+    @field:NotBlank
+    @JsonProperty("authCode")
+    private val _authCode: String?
+){
+    val loginId:String
+        get() = _loginId!!
+    val authCode:String
+        get() = _authCode!!
 }

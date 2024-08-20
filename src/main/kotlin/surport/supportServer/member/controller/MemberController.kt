@@ -1,6 +1,8 @@
 package surport.supportServer.member.controller
 
 import jakarta.validation.Valid
+import org.bouncycastle.asn1.pkcs.CertificationRequest
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -14,12 +16,31 @@ import surport.supportServer.common.authority.TokenInfo
 import surport.supportServer.common.dto.BaseResponse
 import surport.supportServer.common.dto.CustomUser
 import surport.supportServer.member.dto.*
+import surport.supportServer.member.repository.MailRepository
 
 @RequestMapping("/member")
 @RestController
 class MemberController(
-    private val memberService: MemberService
+    private val memberService: MemberService,
 ) {
+    /**
+     * 이메일 인증
+     */
+    @PostMapping("/mail")
+    fun sendMail(@RequestBody @Valid mailDto: MailDto): BaseResponse<Unit> {
+        val resultMsg: String = memberService.sendMail(mailDto)
+        return BaseResponse(message = resultMsg)
+    }
+
+    /**
+     * 이메일 검증
+     */
+    @PostMapping("/mailcheck")
+    fun mailCheck(@RequestBody @Valid mailCheckDto: MailCheckDto): BaseResponse<Unit> {
+        val resultMsg: String = memberService.mailCheck(mailCheckDto.loginId, mailCheckDto.authCode)
+        return BaseResponse(message = resultMsg)
+    }
+
     /**
      * 회원가입
      */
