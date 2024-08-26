@@ -20,7 +20,7 @@ class MailUtility(
         val randomString = getRandomString()
 
         val content = "SUPPORT 이메일 인증<br><h2>인증번호 : ${randomString}</h2><br>이용 해 주셔서 감사합니다"
-        val suwonmail = mailDto.loginId + "@icloud.com"
+        val suwonmail = mailDto.loginId + "@gmail.com"
 
         val mimeMessage = mailSender.createMimeMessage()
         val mimeMessageHelper = MimeMessageHelper(mimeMessage, false, "UTF-8")

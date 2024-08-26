@@ -12,12 +12,15 @@ import surport.supportServer.common.authority.JwtTokenProvider
 import surport.supportServer.common.authority.TokenInfo
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.mail.MailUtility
+import surport.supportServer.common.service.RefreshTokenIngoRepositoryRedis
 import surport.supportServer.common.status.ROLE
 import surport.supportServer.member.dto.*
 import surport.supportServer.member.entity.Mail
 import surport.supportServer.member.entity.MemberRole
+import surport.supportServer.member.entity.RefreshToken
 import surport.supportServer.member.repository.MailRepository
 import surport.supportServer.member.repository.MemberRoleRepository
+import surport.supportServer.member.repository.RefreshTokenIngoRepository
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -29,9 +32,10 @@ class MemberService(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val mailUtility: MailUtility,
-    private val mailRepository: MailRepository
+    private val mailRepository: MailRepository,
+    private val refreshTokenIngoRepository: RefreshTokenIngoRepositoryRedis,
 
-) {
+    ) {
     /**
      * 이메일 인증
      */
@@ -79,7 +83,6 @@ class MemberService(
      * 회원가입
      */
     fun signUp(memberDtoRequest: MemberDtoRequest):String {
-        //ID 중복 검사 나중에 평션 새로 만들기
         var member = memberDtoRequest.toEntity()
 
         memberRepository.save(member)
@@ -95,17 +98,51 @@ class MemberService(
      */
     fun login(loginDto: LoginDto): TokenInfo{
         //암호화된 비밀번호와의 대조
-        var member: Member? = memberRepository.findByLoginId(loginDto.loginId)
+        var member: Member = memberRepository.findByLoginId(loginDto.loginId)
             ?: throw InvalidInputException("Input", "아이디와 비밀번호를 확인하세요")
         val encoder = SCryptPasswordEncoder(16,8,1,32,64)
-        if(!encoder.matches(loginDto.password,member?.password)){
+        if(!encoder.matches(loginDto.password,member.password)){
             throw InvalidInputException("Input", "아이디와 비밀번호를 확인하세요")
         }
 
         val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member?.password)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
+        val createToken: TokenInfo = jwtTokenProvider.createToken(authentication)
+        val timeout =  jwtTokenProvider.getTimeoutFromRefreshToken(createToken.refreshToken)
+        val userId = member.id!!
+        val refreshToken =RefreshToken(null,userId, createToken.refreshToken, timeout)
 
-        return jwtTokenProvider.createToken(authentication)
+        refreshTokenIngoRepository.save(userId,createToken.refreshToken)
+
+        return createToken
+    }
+
+    /**
+     * 유저의 모든 Refresh 토큰 삭제
+     */
+    fun deleteAllRefreshToken(userId: Long){
+        refreshTokenIngoRepository.deleteByUserId(userId)
+    }
+
+    /**
+     * Refresh 토큰 검증 후 토큰 재발급
+     */
+    fun validateRefreshTokenAndCreateToken(refreshToken: String): TokenInfo{
+        refreshTokenIngoRepository.findByRefreshToken(refreshToken)
+            ?: throw InvalidInputException("refreshToken", "만료 되거나 찾을 수 없는 Refresh 토큰 입니다. 재 로그인이 필요합니다.")
+
+        val newTokenInfo: TokenInfo = jwtTokenProvider.validateRefreshTokenAndCreateToken(refreshToken)
+
+        refreshTokenIngoRepository.deleteByRefreshToken(refreshToken)
+
+        val userId:Long = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken)
+        val timeout =  jwtTokenProvider.getTimeoutFromRefreshToken(newTokenInfo.refreshToken)
+
+        val refreshToken =RefreshToken(null,userId, newTokenInfo.refreshToken, timeout)
+
+        refreshTokenIngoRepository.save(userId,newTokenInfo.refreshToken)
+
+        return newTokenInfo
     }
 
     /**
@@ -125,7 +162,6 @@ class MemberService(
 
         memberUpdateDto.nickname?.let { existingMember.nickname = it }
         memberUpdateDto.gender?.let { existingMember.gender = it }
-        memberUpdateDto.admin?.let { existingMember.admin = it }
         memberUpdateDto.dormType?.let { existingMember.dormType = it }
         memberUpdateDto.dormNo?.let { existingMember.dormNo = it }
         memberUpdateDto.roomNo?.let { existingMember.roomNo = it }

@@ -60,6 +60,15 @@ class MemberController(
     }
 
     /**
+     * Refresh 토큰
+     */
+    @PostMapping("/token/refresh")
+    fun tokenRefresh(@RequestBody @Valid tokenRefreshDto: TokenRefreshDto): BaseResponse<TokenInfo>{
+        val tokenInfo: TokenInfo = memberService.validateRefreshTokenAndCreateToken(tokenRefreshDto.refreshToken)
+        return BaseResponse(data = tokenInfo)
+    }
+
+    /**
      * 내 정보 보기
      */
     @GetMapping("/info")
@@ -80,6 +89,9 @@ class MemberController(
         return BaseResponse(message = resultMsg)
     }
 
+    /**
+     * 비밀번호 수정
+     */
     @PutMapping("/info/password")
     fun changePassword(@RequestBody @Valid passwordChangeDto: PasswordChangeDto): BaseResponse<Unit> {
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
@@ -87,5 +99,13 @@ class MemberController(
         return BaseResponse(message = resultMsg)
     }
 
-
+    /**
+     * 로그아웃
+     */
+    @GetMapping("/logout")
+    fun logOut():BaseResponse<Unit>{
+        val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
+        memberService.deleteAllRefreshToken(userId)
+        return BaseResponse()
+    }
 }

@@ -1,0 +1,13 @@
+POST localhost:9999/member/signup
+Content-Type: application/json
+
+{
+  "loginId":"21018109",
+  "password":"zxcv1234!",
+  "nickname":"수원대행정실",
+  "gender":"MAN",
+  "admin":false,
+  "dormType":"GounB",
+  "dormNo":203,
+  "roomNo":0
+}

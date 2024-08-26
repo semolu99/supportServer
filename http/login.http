@@ -1,0 +1,7 @@
+POST localhost:9999/member/login
+Content-Type: application/json
+
+{
+    "loginId":"21018109",
+    "password":"zxcv1234!"
+}

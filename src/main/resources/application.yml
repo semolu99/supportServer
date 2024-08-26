@@ -41,11 +41,11 @@ spring:
           ssl:
             enable: true
             protocols: TLSv1.2
-  redis:
-    post: 6379
   data:
     redis:
       host: localhost
+      port: 6379
+
 
 logging:
   pattern:
@@ -58,4 +58,5 @@ logging:
       springframework:
         mail: debug
 jwt:
-  secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFsRhT4YSdSb5SD515ASDASD515sdasdASD5ASD515ASDASDaDSAFAF1169W1sdaw
+  access_secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFs
+  refresh_secret: 45EdasdasaD6AGaF15DadFufN4Oui8Bfv3ScFj6RwaFASD515sdasdASD5ASD515

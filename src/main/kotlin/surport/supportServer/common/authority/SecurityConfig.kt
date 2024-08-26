@@ -31,8 +31,9 @@ class SecurityConfig(
             .authorizeHttpRequests{
                 it.requestMatchers("/member/signup","/member/login","/member/mail","/member/mailcheck").anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
-                    .requestMatchers("/admin").hasRole("ADMIN")
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().permitAll()
+
             }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider),

@@ -1,5 +1,6 @@
 package surport.supportServer.common.service
 
+import jakarta.transaction.Transactional
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
@@ -12,6 +13,7 @@ import surport.supportServer.member.entity.Member
 import surport.supportServer.member.repository.MemberRepository
 
 @Service
+@Transactional
 class CustomUserDetailsService(
     private val memberRepository: MemberRepository,
     private val passwordEncoder: PasswordEncoder,
