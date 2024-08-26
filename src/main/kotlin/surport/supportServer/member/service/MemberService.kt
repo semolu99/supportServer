@@ -20,7 +20,6 @@ import surport.supportServer.member.entity.MemberRole
 import surport.supportServer.member.entity.RefreshToken
 import surport.supportServer.member.repository.MailRepository
 import surport.supportServer.member.repository.MemberRoleRepository
-import surport.supportServer.member.repository.RefreshTokenIngoRepository
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -40,7 +39,7 @@ class MemberService(
      * 이메일 인증
      */
     fun sendMail(mailDto: MailDto):String {
-        var member: Member? = memberRepository.findByLoginId(mailDto.loginId)
+        val member: Member? = memberRepository.findByLoginId(mailDto.loginId)
         if (member != null) {
             throw InvalidInputException("loginId", "이미 등록된 ID 입니다.")
         }
@@ -74,7 +73,7 @@ class MemberService(
             throw IllegalStateException("인증 번호가 만료된 상태입니다.")
         }
 
-        mailRepository.deleteAllByLoginId(loginId)
+        mailRepository.deleteByLoginId(loginId)
 
         return "메일 인증 완료!"
     }
@@ -185,5 +184,28 @@ class MemberService(
         return "비밀 번호 변경 완료 되었습니다."
     }
 
+    /**
+     * 비밀번호 찾기
+     */
+    fun findPassword(loginId: String):String{
+        var member: Member? = memberRepository.findByLoginId(loginId)
+            ?: throw InvalidInputException("loginId", "없는 ID 입니다.")
+        val encoder = SCryptPasswordEncoder(16,8,1,32,64)
+        val newPassword = mailUtility.sendPassword(loginId)
+        member?.password= encoder.encode(newPassword)
 
+        return "정상적으로 발송 되었습니다"
+    }
+
+    /**
+     * 회원 탈퇴
+     */
+    fun deleteMember(userId: Long): String{
+        val member = memberRepository.findByIdOrNull(userId)
+            ?: throw InvalidInputException("Token","토큰 값을 확인해주세요")
+        memberRoleRepository.deleteByMember(member)
+        memberRepository.deleteByLoginId(member!!.loginId)
+        refreshTokenIngoRepository.deleteByUserId(userId)
+        return "성공적으로 탈퇴 되었습니다."
+    }
 }

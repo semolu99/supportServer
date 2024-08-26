@@ -1,8 +1,9 @@
+###회원가입
 POST localhost:9999/member/signup
 Content-Type: application/json
 
 {
-  "loginId":"21018109",
+  "loginId":"barbo9510",
   "password":"zxcv1234!",
   "nickname":"수원대행정실",
   "gender":"MAN",
@@ -11,3 +12,15 @@ Content-Type: application/json
   "dormNo":203,
   "roomNo":0
 }
+
+###로그인
+POST localhost:9999/member/login
+Content-Type: application/json
+
+{
+"loginId":"barbo9510",
+"password":"zxcv1234!"
+}
+
+### 비밀번호 찾기
+POST localhost:9999/member/mail/find?loginId=barbo9510

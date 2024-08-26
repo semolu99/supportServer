@@ -2,5 +2,5 @@ POST localhost:9999/member/mail
 Content-Type: application/json
 
 {
-    "loginId":"gygh1230"
+    "loginId":"barbo9510"
 }
