@@ -22,6 +22,6 @@ class AdminController(
     @PostMapping("/add")
     fun addAdmin(@RequestBody @Valid addAdminDto: AddAdminDto): BaseResponse<Unit> {
         val response = adminService.addAdmin(addAdminDto.loginId)
-        return BaseResponse(message = response)
+        return BaseResponse(statusMessage = response)
     }
 }

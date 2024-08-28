@@ -1,9 +1,7 @@
-package surport.supportServer.common.service
+package surport.supportServer.common.repository
 
-import io.jsonwebtoken.Claims
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.stereotype.Repository
-import surport.supportServer.common.authority.JwtTokenProvider
 import surport.supportServer.common.authority.REFRESH_EXPIRATION_MILLISECONDS
 import java.util.concurrent.TimeUnit
 

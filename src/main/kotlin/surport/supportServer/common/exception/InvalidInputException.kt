@@ -1,6 +1,7 @@
 package surport.supportServer.common.exception
 
 class InvalidInputException(
-    val fieldName: String = "",
-    message: String = "Invalid Input"
-) : RuntimeException(message)
+    val statusCode: Int,
+    val statusMessage: String,
+    val code: String
+) : RuntimeException()

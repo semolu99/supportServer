@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional
 import org.springframework.stereotype.Service
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ROLE
+import surport.supportServer.common.status.ResultCode
 import surport.supportServer.member.entity.Member
 import surport.supportServer.member.entity.MemberRole
 import surport.supportServer.member.repository.MemberRepository
@@ -21,7 +22,7 @@ class AdminService(
      */
     fun addAdmin(loginId:String): String{
         var member : Member? = memberRepository.findByLoginId(loginId)
-            ?: throw throw InvalidInputException("loginId", "존재 하지 않는 ID 입니다.")
+            ?: throw throw InvalidInputException(ResultCode.NOT_FIND_ID.statusCode, ResultCode.NOT_FIND_ID.message, ResultCode.NOT_FIND_ID.code)
         val tempMemberRole: MemberRole = memberRoleRepository.findByMember(member)
         val memberRole:MemberRole = MemberRole(tempMemberRole.id, ROLE.ADMIN, tempMemberRole.member)
         memberRoleRepository.save(memberRole)

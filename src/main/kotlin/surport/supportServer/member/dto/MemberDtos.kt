@@ -22,7 +22,7 @@ data class MemberDtoRequest(
     @field:NotBlank
     @field:Pattern(
         regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{8,20}\$",
-        message = "영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요."
+        message = "영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요.",
     )
     @JsonProperty("password")
     private val _password: String?,

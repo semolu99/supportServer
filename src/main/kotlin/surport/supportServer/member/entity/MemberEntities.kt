@@ -65,21 +65,21 @@ class MemberRole(
     val member: Member
 )
 
-@Entity
-class Mail(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(nullable = false)
-    var loginId: String,
-
-    @Column(nullable = false)
-    var authCode: String,
-
-    @Column(nullable = false)
-    var sendDate: LocalDateTime
-)
+//@Entity
+//class Mail(
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    val id: Long? = null,
+//
+//    @Column(nullable = false)
+//    var loginId: String,
+//
+//    @Column(nullable = false)
+//    var authCode: String,
+//
+//    @Column(nullable = false)
+//    var sendDate: LocalDateTime
+//)
 
 @Entity
 class RefreshToken(

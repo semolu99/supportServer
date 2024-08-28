@@ -18,7 +18,7 @@ import surport.supportServer.common.authority.TokenInfo
 import surport.supportServer.common.dto.BaseResponse
 import surport.supportServer.common.dto.CustomUser
 import surport.supportServer.member.dto.*
-import surport.supportServer.member.repository.MailRepository
+//import surport.supportServer.member.repository.MailRepository
 
 @RequestMapping("/member")
 @RestController
@@ -26,12 +26,19 @@ class MemberController(
     private val memberService: MemberService,
 ) {
     /**
+     * 테스트
+     */
+    @GetMapping("/test")
+    fun gettest():String{
+        return "ddd"
+    }
+    /**
      * 이메일 인증
      */
     @PostMapping("/mail")
     fun sendMail(@RequestBody @Valid mailDto: MailDto): BaseResponse<Unit> {
         val resultMsg: String = memberService.sendMail(mailDto)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
     /**
@@ -40,7 +47,7 @@ class MemberController(
     @PostMapping("/mailcheck")
     fun mailCheck(@RequestBody @Valid mailCheckDto: MailCheckDto): BaseResponse<Unit> {
         val resultMsg: String = memberService.mailCheck(mailCheckDto.loginId, mailCheckDto.authCode)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
     /**
@@ -49,7 +56,7 @@ class MemberController(
     @PostMapping("/signup")
     fun signUp(@RequestBody @Valid memberDtoRequest: MemberDtoRequest): BaseResponse<Unit> {
         val resultMsg: String = memberService.signUp(memberDtoRequest)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
     /**
@@ -88,7 +95,7 @@ class MemberController(
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         memberUpdateDto.id = userId
         val resultMsg: String = memberService.saveMyInfo(memberUpdateDto)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
     /**
@@ -98,7 +105,7 @@ class MemberController(
     fun changePassword(@RequestBody @Valid passwordChangeDto: PasswordChangeDto): BaseResponse<Unit> {
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         val resultMsg = memberService.changePassword(userId, passwordChangeDto.currentPassword, passwordChangeDto.newPassword)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
     /**
@@ -117,7 +124,7 @@ class MemberController(
     @PostMapping("/mail/find")
     fun findPassword(@RequestParam("loginId")loginId:String): BaseResponse<Unit>{
         val resultMsg:String = memberService.findPassword(loginId)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
     /**
      * 회원 탈퇴
@@ -126,7 +133,7 @@ class MemberController(
     fun deleteMember():BaseResponse<Unit>{
         val userId = (SecurityContextHolder.getContext().authentication.principal as CustomUser).userId
         val resultMsg = memberService.deleteMember(userId)
-        return BaseResponse(message = resultMsg)
+        return BaseResponse(statusMessage = resultMsg)
     }
 
 }

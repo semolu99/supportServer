@@ -12,13 +12,15 @@ import surport.supportServer.common.authority.JwtTokenProvider
 import surport.supportServer.common.authority.TokenInfo
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.mail.MailUtility
-import surport.supportServer.common.service.RefreshTokenIngoRepositoryRedis
+import surport.supportServer.common.repository.MailRepositoryRedis
+import surport.supportServer.common.repository.RefreshTokenIngoRepositoryRedis
 import surport.supportServer.common.status.ROLE
+import surport.supportServer.common.status.ResultCode
 import surport.supportServer.member.dto.*
-import surport.supportServer.member.entity.Mail
+//import surport.supportServer.member.entity.Mail
 import surport.supportServer.member.entity.MemberRole
 import surport.supportServer.member.entity.RefreshToken
-import surport.supportServer.member.repository.MailRepository
+//import surport.supportServer.member.repository.MailRepository
 import surport.supportServer.member.repository.MemberRoleRepository
 import java.time.Duration
 import java.time.LocalDateTime
@@ -31,8 +33,9 @@ class MemberService(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val mailUtility: MailUtility,
-    private val mailRepository: MailRepository,
+//    private val mailRepository: MailRepository,
     private val refreshTokenIngoRepository: RefreshTokenIngoRepositoryRedis,
+    private val mailRepositoryRedis: MailRepositoryRedis
 
     ) {
     /**
@@ -41,18 +44,12 @@ class MemberService(
     fun sendMail(mailDto: MailDto):String {
         val member: Member? = memberRepository.findByLoginId(mailDto.loginId)
         if (member != null) {
-            throw InvalidInputException("loginId", "이미 등록된 ID 입니다.")
+            throw InvalidInputException(ResultCode.DUPLICATION_ID.statusCode,ResultCode.DUPLICATION_ID.message, ResultCode.DUPLICATION_ID.code)
         }
 
         val randomString = mailUtility.sendMail(mailDto)
 
-        mailRepository.save(
-            Mail(
-                loginId = mailDto.loginId,
-                authCode = randomString,
-                sendDate = LocalDateTime.now()
-            )
-        )
+        mailRepositoryRedis.save(mailDto.loginId, randomString)
 
         return "메일을 성공적으로 보냈습니다."
     }
@@ -61,28 +58,28 @@ class MemberService(
      * 이메일 검증
      */
     fun mailCheck(loginId: String, authCode: String):String {
-        val mailList: List<Mail> = mailRepository.findAllByLoginId(loginId)
-            ?: throw InvalidInputException("loginID", "일치하는 아이디를 찾을 수 없습니다")
-
-        val now = LocalDateTime.now()
-
-        val matchingMail = mailList.find { it.authCode == authCode }
-            ?: throw InvalidInputException("authcode", "인증 코드가 틀렸습니다.")
-
-        if (Duration.between(matchingMail.sendDate, now).toMinutes() > 15) {
-            throw IllegalStateException("인증 번호가 만료된 상태입니다.")
+        val mail = mailRepositoryRedis.findByMailCode(loginId)
+            ?: throw InvalidInputException(ResultCode.MAIL_ERROR.statusCode, ResultCode.MAIL_ERROR.message, ResultCode.MAIL_ERROR.code,)
+        println(mail)
+        if(authCode != mail){
+            throw InvalidInputException(ResultCode.MAIL_ERROR.statusCode,ResultCode.MAIL_ERROR.message, ResultCode.MAIL_ERROR.code)
         }
+        mailRepositoryRedis.deleteByLoginId(loginId)
 
-        mailRepository.deleteByLoginId(loginId)
-
-        return "메일 인증 완료!"
+        return "정상 확인 되었습니다"
     }
+
+
 
     /**
      * 회원가입
      */
     fun signUp(memberDtoRequest: MemberDtoRequest):String {
-        var member = memberDtoRequest.toEntity()
+        var member: Member? = memberRepository.findByLoginId(memberDtoRequest.loginId)
+        if (member != null) {
+            throw InvalidInputException(ResultCode.DUPLICATION_ID.statusCode,ResultCode.DUPLICATION_ID.message, ResultCode.DUPLICATION_ID.code)
+        }
+        member = memberDtoRequest.toEntity()
 
         memberRepository.save(member)
 
@@ -98,10 +95,10 @@ class MemberService(
     fun login(loginDto: LoginDto): TokenInfo{
         //암호화된 비밀번호와의 대조
         var member: Member = memberRepository.findByLoginId(loginDto.loginId)
-            ?: throw InvalidInputException("Input", "아이디와 비밀번호를 확인하세요")
+            ?: throw InvalidInputException(ResultCode.LOGIN_ERROR.statusCode,ResultCode.LOGIN_ERROR.message, ResultCode.LOGIN_ERROR.code)
         val encoder = SCryptPasswordEncoder(16,8,1,32,64)
         if(!encoder.matches(loginDto.password,member.password)){
-            throw InvalidInputException("Input", "아이디와 비밀번호를 확인하세요")
+            throw InvalidInputException(ResultCode.LOGIN_ERROR.statusCode, ResultCode.LOGIN_ERROR.message ,ResultCode.LOGIN_ERROR.code)
         }
 
         val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member?.password)
@@ -128,7 +125,7 @@ class MemberService(
      */
     fun validateRefreshTokenAndCreateToken(refreshToken: String): TokenInfo{
         refreshTokenIngoRepository.findByRefreshToken(refreshToken)
-            ?: throw InvalidInputException("refreshToken", "만료 되거나 찾을 수 없는 Refresh 토큰 입니다. 재 로그인이 필요합니다.")
+            ?: throw InvalidInputException(ResultCode.TOKEN_EXPIRED.statusCode, ResultCode.TOKEN_EXPIRED.message, ResultCode.TOKEN_EXPIRED.message)
 
         val newTokenInfo: TokenInfo = jwtTokenProvider.validateRefreshTokenAndCreateToken(refreshToken)
 
@@ -148,7 +145,7 @@ class MemberService(
      * 내 정보 조회
      */
     fun searchMyInfo(id: Long): MemberDtoResponse{
-        val member : Member = memberRepository.findByIdOrNull(id) ?: throw InvalidInputException("id", "회원 번호(${id})가 존재 하지 않는 유저입니다.")
+        val member : Member = memberRepository.findByIdOrNull(id) ?: throw InvalidInputException(ResultCode.NOT_MEMBER.statusCode, "회원 번호(${id})가 존재 하지 않는 유저입니다.",ResultCode.NOT_MEMBER.code)
         return member.toDto()
     }
 
@@ -157,7 +154,7 @@ class MemberService(
      */
     fun saveMyInfo(memberUpdateDto: MemberUpdateDto): String {
         val existingMember = memberRepository.findById(memberUpdateDto.id)
-            .orElseThrow { RuntimeException("회원 정보를 찾을 수 없습니다.") }
+            .orElseThrow { InvalidInputException(ResultCode.NOT_MEMBER.statusCode,"회원 번호(${memberUpdateDto.id})가 존재 하지 않는 유저입니다.",ResultCode.NOT_MEMBER.code ) }
 
         memberUpdateDto.nickname?.let { existingMember.nickname = it }
         memberUpdateDto.gender?.let { existingMember.gender = it }
@@ -173,11 +170,11 @@ class MemberService(
      */
     fun changePassword(userId: Long, currentPassword: String, newPassword: String): String {
         val member = memberRepository.findById(userId).orElseThrow {
-            RuntimeException("회원 정보를 찾을 수 없습니다.")
+            InvalidInputException(ResultCode.NOT_MEMBER.statusCode,ResultCode.NOT_MEMBER.message,ResultCode.NOT_MEMBER.code)
         }
         val encoder = SCryptPasswordEncoder(16,8,1,32,64)
         if (!encoder.matches(currentPassword, member.password)) {
-            throw RuntimeException("현재 비밀 번호가 맞지 않습니다.")
+            throw InvalidInputException(ResultCode.PASSWORD_ERROR.statusCode,ResultCode.PASSWORD_ERROR.message,ResultCode.PASSWORD_ERROR.code)
         }
         member.password = encoder.encode(newPassword)
         memberRepository.save(member)
@@ -189,11 +186,11 @@ class MemberService(
      */
     fun findPassword(loginId: String):String{
         var member: Member? = memberRepository.findByLoginId(loginId)
-            ?: throw InvalidInputException("loginId", "없는 ID 입니다.")
+            ?: throw InvalidInputException(ResultCode.NOT_FIND_ID.statusCode, ResultCode.NOT_FIND_ID.message, ResultCode.NOT_FIND_ID.code)
         val encoder = SCryptPasswordEncoder(16,8,1,32,64)
         val newPassword = mailUtility.sendPassword(loginId)
         member?.password= encoder.encode(newPassword)
-
+        memberRepository.save(member!!)
         return "정상적으로 발송 되었습니다"
     }
 
@@ -202,10 +199,11 @@ class MemberService(
      */
     fun deleteMember(userId: Long): String{
         val member = memberRepository.findByIdOrNull(userId)
-            ?: throw InvalidInputException("Token","토큰 값을 확인해주세요")
+            ?: throw InvalidInputException(ResultCode.INVALID_ACCESS_TOKEN.statusCode,ResultCode.INVALID_ACCESS_TOKEN.message,ResultCode.INVALID_ACCESS_TOKEN.code)
         memberRoleRepository.deleteByMember(member)
         memberRepository.deleteByLoginId(member!!.loginId)
         refreshTokenIngoRepository.deleteByUserId(userId)
+
         return "성공적으로 탈퇴 되었습니다."
     }
 }

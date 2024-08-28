@@ -15,7 +15,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val jwtTokenProvider: JwtTokenProvider
+    private val jwtTokenProvider: JwtTokenProvider,
+    private val entryPoint: JwtAuthenticationEntryPoint
 ) {
     @Bean
     fun bCryptPasswordEncoder(): BCryptPasswordEncoder{
@@ -29,12 +30,13 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests{
-                it.requestMatchers("/member/signup","/member/login","/member/mail","/member/mailcheck","/member/mail/find").anonymous()
+                it.requestMatchers("/member/signup","/member/login","/member/mail","/member/mailcheck","/member/mail/find", "/member/test").anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
                     .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().permitAll()
 
             }
+            .exceptionHandling { it.authenticationEntryPoint(entryPoint) }
             .addFilterBefore(
                 JwtAuthenticationFilter(jwtTokenProvider),
                 UsernamePasswordAuthenticationFilter::class.java
