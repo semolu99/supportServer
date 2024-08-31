@@ -6,6 +6,9 @@ import jakarta.persistence.*
 import jakarta.validation.constraints.Min
 import surport.supportServer.common.status.ROLE
 import surport.supportServer.member.dto.MemberDtoResponse
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.Date
 
 @Entity
 @Table(
@@ -13,7 +16,7 @@ import surport.supportServer.member.dto.MemberDtoResponse
 )
 class Member(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
     @Column(nullable = false, length = 30, updatable = false)
@@ -28,9 +31,6 @@ class Member(
     @Column(nullable = false, length = 5)
     @Enumerated(EnumType.STRING)
     var gender: Gender,
-
-    @Column(nullable = false)
-    var admin: Boolean,
 
     @Column(nullable = false, length = 6)
     @Enumerated(EnumType.STRING)
@@ -47,13 +47,13 @@ class Member(
     val memberRole: List<MemberRole>? = null
 
     fun toDto(): MemberDtoResponse =
-        MemberDtoResponse(id!!, loginId, nickname, gender.desc, admin, dormType.desc, dormNo, roomNo)
+        MemberDtoResponse(id!!, loginId, nickname, gender.desc, dormType.desc, dormNo, roomNo)
 }
 
 @Entity
 class MemberRole(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id:Long? = null,
 
     @Column(nullable = false, length = 30)
@@ -63,4 +63,37 @@ class MemberRole(
     @ManyToOne(fetch = FetchType.LAZY) //다대일
     @JoinColumn(foreignKey = ForeignKey(name = "fk_user_role_member_id"))
     val member: Member
+)
+
+//@Entity
+//class Mail(
+//    @Id
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+//    val id: Long? = null,
+//
+//    @Column(nullable = false)
+//    var loginId: String,
+//
+//    @Column(nullable = false)
+//    var authCode: String,
+//
+//    @Column(nullable = false)
+//    var sendDate: LocalDateTime
+//)
+
+@Entity
+class RefreshToken(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long? = null,
+
+    @Column(nullable = false)
+    val userId: Long,
+
+    @Column(nullable = false)
+    val refreshToken: String,
+
+    @Column(nullable = false)
+    val timeout: Date
+
 )

@@ -9,6 +9,7 @@ import surport.supportServer.common.annotation.ValidEnum
 import surport.supportServer.common.status.Dorm_type
 import surport.supportServer.common.status.Gender
 import surport.supportServer.member.entity.Member
+import java.time.LocalDate
 
 //회원 가입시 받을 정보? 룸 넘버는 일단 보류
 data class MemberDtoRequest(
@@ -21,7 +22,7 @@ data class MemberDtoRequest(
     @field:NotBlank
     @field:Pattern(
         regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{8,20}\$",
-        message = "영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요."
+        message = "영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요.",
     )
     @JsonProperty("password")
     private val _password: String?,
@@ -31,13 +32,9 @@ data class MemberDtoRequest(
     private val _nickname: String?,
 
     @field:NotBlank
-    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMEN 중 하나를 선택 해 주세요.")
+    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMAN 중 하나를 선택 해 주세요.")
     @JsonProperty("gender")
     private val _gender: String?,
-
-    @field:NotNull
-    @JsonProperty("admin")
-    private val _admin: Boolean?,
 
     @field:NotBlank
     @JsonProperty("dormType")
@@ -61,8 +58,6 @@ data class MemberDtoRequest(
         get() = _nickname!!
     val gender: Gender
         get() = Gender.valueOf(_gender!!)
-    val admin: Boolean
-        get() = _admin!!
     val dormType: Dorm_type
         get() = Dorm_type.valueOf(_dormType!!)
     val dormNo: Int
@@ -71,7 +66,7 @@ data class MemberDtoRequest(
         get() = _roomNo
 
     fun toEntity(): Member =
-        Member(id, loginId,password,nickname,gender, admin, dormType, dormNo, roomNo)
+        Member(id, loginId,password,nickname,gender, dormType, dormNo, roomNo)
 }
 
 data class LoginDto(
@@ -94,7 +89,6 @@ data class MemberDtoResponse(
     val loginId: String,
     val nickname: String,
     val gender: String,
-    val admin: Boolean,
     val dormType: String,
     val dormNo: Int,
     val roomNo: Int?,
@@ -120,10 +114,6 @@ data class MemberUpdateDto(
     @JsonProperty("gender")
     private val _gender: String?,
 
-    @field:NotNull
-    @JsonProperty("admin")
-    private val _admin: Boolean?,
-
     @field:NotBlank
     @field:ValidEnum(enumClass = Dorm_type::class, message = "알맞은 값을 선택 해 주세요.")
     @JsonProperty("dormType")
@@ -140,8 +130,6 @@ data class MemberUpdateDto(
         get() = _nickname
     val gender: Gender?
         get() = _gender?.let { Gender.valueOf(it) }
-    val admin: Boolean?
-        get() = _admin
     val dormType: Dorm_type?
         get() = _dormType?.let { Dorm_type.valueOf(it) }
     val dormNo: Int?
@@ -149,3 +137,47 @@ data class MemberUpdateDto(
     val roomNo: Int?
         get() = _roomNo
 }
+
+data class MailDto(
+    var id: Long?,
+
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+
+    var authCode: String?,
+
+    var sendDate: LocalDate?
+){
+    val loginId : String
+        get() = _loginId!!
+
+}
+
+data class MailCheckDto(
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+
+    @field:NotBlank
+    @JsonProperty("authCode")
+    private val _authCode: String?
+){
+    val loginId:String
+        get() = _loginId!!
+    val authCode:String
+        get() = _authCode!!
+}
+
+data class AddAdminDto(
+    @field:NotBlank
+    @JsonProperty("loginId")
+    private val _loginId: String?,
+){
+    val loginId:String
+        get()=_loginId!!
+}
+
+data class TokenRefreshDto(
+    val refreshToken : String
+)

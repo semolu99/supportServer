@@ -1,5 +1,5 @@
 server:
-  port: 9999
+  port: 8080
   servlet:
     context-path: /
     encoding:
@@ -11,13 +11,13 @@ spring:
     user:
       name: user
       password: 1234
-
+  application:
+    name: support
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/support_test?serverTimezone=Asia/Seoul
     username: supportTester
-    password: qwer1234*
-
+    password: Qwer1234*
   jpa:
     hibernate:
       ddl-auto: create
@@ -28,6 +28,23 @@ spring:
         show_sql: false
         highlight_sql: true
     open-in-view: true
+  mail:
+    host: smtp.naver.com
+    port: 465
+    username: supportofficial@naver.com
+    password: XSSUF8781GJL
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          ssl:
+            enable: true
+            protocols: TLSv1.2
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
 
 logging:
@@ -38,5 +55,8 @@ logging:
       hibernate:
         type.descriptor.sql: trace
         SQL: debug
+      springframework:
+        mail: debug
 jwt:
-  secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFsRhT4YSdSb5SD515ASDASD515sdasdASD5ASD515ASDASDaDSAFAF1169W1sdaw
+  access_secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFs
+  refresh_secret: 45EdasdasaD6AGaF15DadFufN4Oui8Bfv3ScFj6RwaFASD515sdasdASD5ASD515

@@ -1,0 +1,15 @@
+POST localhost:8080/member/mail
+Content-Type: application/json
+
+{
+    "loginId":"barbo9510"
+}
+
+###barbo9510@icloud.com
+POST localhost:9999/member/mailcheck
+Content-Type: application/json
+
+{
+  "loginId": "barbo9510",
+  "authCode": "8b1ca6"
+}

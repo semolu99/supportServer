@@ -1,0 +1,26 @@
+###회원가입
+POST localhost:9999/member/signup
+Content-Type: application/json
+
+{
+  "loginId":"barbo9510",
+  "password":"zxcv1234!",
+  "nickname":"수원대행정실",
+  "gender":"MAN",
+  "admin":false,
+  "dormType":"GounA",
+  "dormNo":203,
+  "roomNo":0
+}
+
+###로그인
+POST localhost:9999/member/login
+Content-Type: application/json
+
+{
+  "loginId":"barbo9510",
+  "password":"t8qgl3lbi6"
+}
+
+### 비밀번호 찾기
+POST localhost:9999/member/mail/find?loginId=barbo9510
