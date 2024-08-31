@@ -2,9 +2,13 @@ package surport.supportServer.common.mail
 
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
+import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Component
 import surport.supportServer.member.dto.MailDto
 import surport.supportServer.member.repository.MemberRepository
+import java.sql.Time
+import java.time.LocalDateTime
+import java.time.LocalDateTime.now
 import java.util.*
 
 @Component
@@ -19,6 +23,7 @@ class MailUtility(
         val length = 6
         return (UUID.randomUUID().toString()).substring(0,length)
     }
+    @Async
     fun sendMail(mailDto: MailDto) : String {
         val randomString = getRandomString()
 
@@ -30,8 +35,9 @@ class MailUtility(
         mimeMessageHelper.setTo(mailmaker(mailDto.loginId))
         mimeMessageHelper.setSubject("[Support] 이메일 인증 메일")
         mimeMessageHelper.setText(content,true)
+        println(now())
         mailSender.send(mimeMessage)
-
+        println(now())
         return randomString
     }
     fun getTempPassword(): String {

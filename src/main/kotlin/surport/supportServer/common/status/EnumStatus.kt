@@ -17,7 +17,7 @@ enum class Dorm_type(val desc: String){
 
 enum class ResultCode(val statusCode: Int,val code: String, val message: String) {
     SUCCESS(HttpStatus.OK.value(), "SUCCESS","성공"), // 200
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ERR001","서버 에러가 발생했습니다?"), // 500
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ERR001","서버 에러가 발생했습니다"), // 500
     NOT_FOUND(HttpStatus.NOT_FOUND.value(), "ERR002","요청하신 api를 찾을 수 없습니다."), // 404
     BAD_REQUEST(HttpStatus.BAD_REQUEST.value(), "ERR003","항목이 올바르지 않습니다"), // 400
     MAIL_ERROR(HttpStatus.BAD_REQUEST.value(),"ERR004","발급 받은 인증 코드가 만료 되었거나 잘못 되었습니다."),
