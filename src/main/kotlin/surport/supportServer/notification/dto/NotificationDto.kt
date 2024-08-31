@@ -33,7 +33,7 @@ data class NotificationDto(
         message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
     )
     @JsonProperty("endDate")
-    private val _endDate: String?
+    private val _endDate: String?,
 ){
     val title:String
         get()=_title!!
@@ -58,6 +58,11 @@ data class NotificationDtoResponse(
     val id:Long,
     val title:String,
     val content:String,
+    val startDate:LocalDate,
+    val endDate:LocalDate
+)
+
+data class NotificationDateDto(
     val startDate:LocalDate,
     val endDate:LocalDate
 )

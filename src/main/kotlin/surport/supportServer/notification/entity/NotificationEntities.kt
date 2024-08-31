@@ -9,7 +9,7 @@ import java.time.LocalDate
 @Entity
 class Notification(
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
     @Column(nullable = false)
     val title: String,
@@ -23,7 +23,7 @@ class Notification(
 
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
-    val endDate: LocalDate
+    val endDate: LocalDate,
 ) {
     fun toDto(): NotificationDtoResponse =
         NotificationDtoResponse(id!!, title, content, startDate, endDate)

@@ -1,0 +1,20 @@
+###
+POST localhost:9999/notifications
+Content-Type: application/json
+
+{
+  "title":"오늘 점심 21",
+  "content":"내용",
+  "startDate":"2024-09-05",
+  "endDate":"2024-09-09"
+}
+###
+GET localhost:9999/notifications/1
+###
+GET localhost:9999/notifications
+Content-Type: application/json
+
+{
+  "startDate":"2024-09-01",
+  "endDate":"2024-09-30"
+}
