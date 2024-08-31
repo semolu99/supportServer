@@ -3,7 +3,6 @@ package surport.supportServer.notification.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import surport.supportServer.member.entity.Member
 import surport.supportServer.notification.entity.Notification
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -54,3 +53,11 @@ data class NotificationDto(
     fun toEntity(): Notification =
         Notification(id, title, content, startDate, endDate)
 }
+
+data class NotificationDtoResponse(
+    val id:Long,
+    val title:String,
+    val content:String,
+    val startDate:LocalDate,
+    val endDate:LocalDate
+)

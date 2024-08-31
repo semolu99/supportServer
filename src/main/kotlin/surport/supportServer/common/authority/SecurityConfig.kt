@@ -29,9 +29,9 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests{
-                it.requestMatchers("/member/signup","/member/login").anonymous()
+                it.requestMatchers("/member/signup","/member/login","/notifications/").anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
-                    .requestMatchers("/admin").hasRole("ADMIN")
+                    .requestMatchers("/admin/**").hasRole("ADMIN")
                     .anyRequest().permitAll()
             }
             .addFilterBefore(
