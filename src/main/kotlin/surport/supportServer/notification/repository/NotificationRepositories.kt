@@ -3,14 +3,14 @@ package surport.supportServer.notification.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
-import surport.supportServer.notification.entity.Notification
-import java.time.LocalDate
+import surport.supportServer.notification.entity.Schedule
 
 @Repository
-interface NotificationRepository : JpaRepository<Notification, Long>{
-    fun findAllById(id:Long): Notification?
+interface ScheduleRepository : JpaRepository<Schedule, Long>{
+    fun findAllById(id:Long): Schedule?
 
-    @Query("SELECT e FROM Notification e WHERE e.startDate >= :startDate AND e.endDate <= :endDate")
-    fun findAllByStartDateAndEndDate(startDate:LocalDate, endDate:LocalDate):List<Notification>
+    //@Query("SELECT e FROM Notification e WHERE e.startDate >= :startDate OR e.endDate <= :endDate")
+    @Query("SELECT * FROM Notification e where e.id in (select notification_ids.id from(select i.id ,substring(i.start_date,1,7) as sd, substring(i.end_date ,1,7) as ed from Notification i) notification_ids where notification_ids.sd = :date or notification_ids.ed = :date)", nativeQuery = true)
+    fun findAllByDate(date: String): List<Schedule>?
 }
 

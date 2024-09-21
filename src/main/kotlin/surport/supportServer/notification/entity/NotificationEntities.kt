@@ -1,13 +1,12 @@
 package surport.supportServer.notification.entity
 
 import jakarta.persistence.*
-import surport.supportServer.notification.dto.NotificationDto
-import surport.supportServer.notification.dto.NotificationDtoResponse
+import surport.supportServer.notification.dto.ScheduleDtoResponse
 
 import java.time.LocalDate
 
 @Entity
-class Notification(
+class Schedule(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
@@ -25,7 +24,7 @@ class Notification(
     @Temporal(TemporalType.DATE)
     val endDate: LocalDate,
 ) {
-    fun toDto(): NotificationDtoResponse =
-        NotificationDtoResponse(id!!, title, content, startDate, endDate)
+    fun toDto(): ScheduleDtoResponse =
+        ScheduleDtoResponse(id!!, title, content, startDate, endDate)
 
 }

@@ -3,12 +3,12 @@ package surport.supportServer.notification.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
-import surport.supportServer.notification.entity.Notification
+import surport.supportServer.notification.entity.Schedule
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-data class NotificationDto(
+data class ScheduleDto(
     var id: Long?,
 
     @field:NotBlank
@@ -50,19 +50,14 @@ data class NotificationDto(
     private fun String.toLocalDate():LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-    fun toEntity(): Notification =
-        Notification(id, title, content, startDate, endDate)
+    fun toEntity(): Schedule =
+        Schedule(id, title, content, startDate, endDate)
 }
 
-data class NotificationDtoResponse(
+data class ScheduleDtoResponse(
     val id:Long,
     val title:String,
     val content:String,
-    val startDate:LocalDate,
-    val endDate:LocalDate
-)
-
-data class NotificationDateDto(
     val startDate:LocalDate,
     val endDate:LocalDate
 )

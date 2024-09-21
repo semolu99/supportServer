@@ -30,6 +30,7 @@ class MemberController(
      */
     @GetMapping("/test")
     fun gettest():String{
+        println("************test***************")
         return "ddd"
     }
     /**

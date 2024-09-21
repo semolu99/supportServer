@@ -3,39 +3,38 @@ package surport.supportServer.notification.controller
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import surport.supportServer.common.dto.BaseResponse
-import surport.supportServer.notification.dto.NotificationDateDto
-import surport.supportServer.notification.dto.NotificationDto
-import surport.supportServer.notification.dto.NotificationDtoResponse
-import surport.supportServer.notification.entity.Notification
+import surport.supportServer.notification.dto.ScheduleDto
+import surport.supportServer.notification.dto.ScheduleDtoResponse
+import surport.supportServer.notification.entity.Schedule
 import surport.supportServer.notification.service.NotificationService
-
 
 @RestController
 class NotificationController(
     private val notificationService: NotificationService
 ) {
     /**
-     * 포스트 작성
+     * 스케줄 작성
      */
-    @PostMapping("/notifications")
-    fun addNotification(@RequestBody @Valid notificationDto: NotificationDto): BaseResponse<Unit> {
-        val result = notificationService.addNotification(notificationDto)
+    @PostMapping("/schedule/add")
+    fun addSchedule(@RequestBody @Valid scheduleDto: ScheduleDto): BaseResponse<Unit> {
+        val result = notificationService.addSchedule(scheduleDto)
         return BaseResponse(statusMessage = result)
     }
 
     /**
-     * 특정 공지사항 꺼내기
+     * 특정 스케줄 꺼내기
      */
-    @GetMapping("/notifications/{id}")
-    fun getNotification(@PathVariable id: Long):BaseResponse<NotificationDtoResponse> {
-        val result = notificationService.notificationView(id)
+    @GetMapping("/schedule/{id}")
+    fun getSchedule(@PathVariable id: Long): BaseResponse<ScheduleDtoResponse> {
+        val result = notificationService.getSchedule(id)
         return BaseResponse(data = result, statusMessage = "정상 작동")
     }
+
     /**
-     * 공지 월별 리스트
+     * 스케줄 월별 리스트
      */
-    @GetMapping("/notifications")
-    fun getNotifications(@RequestBody notificationDateDto: NotificationDateDto): BaseResponse<List<Notification>> {
-        return notificationService.getMonthNotifications(notificationDateDto)
+    @GetMapping("/schedule/list")
+    fun getSchedule(@RequestParam date: String): List<Schedule> {
+        return notificationService.getMonthSchedule(date)
     }
 }

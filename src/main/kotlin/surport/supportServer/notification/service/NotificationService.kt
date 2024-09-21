@@ -1,46 +1,43 @@
 package surport.supportServer.notification.service
 
 import jakarta.transaction.Transactional
-import org.springframework.data.repository.findByIdOrNull
-import surport.supportServer.notification.dto.NotificationDto
-import surport.supportServer.notification.entity.Notification
+import surport.supportServer.notification.dto.ScheduleDto
+import surport.supportServer.notification.entity.Schedule
 import org.springframework.stereotype.Service
-import surport.supportServer.common.dto.BaseResponse
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ResultCode
-import surport.supportServer.notification.dto.NotificationDateDto
-import surport.supportServer.notification.dto.NotificationDtoResponse
-import surport.supportServer.notification.repository.NotificationRepository
-import java.time.LocalDate
+import surport.supportServer.notification.dto.ScheduleDtoResponse
+import surport.supportServer.notification.repository.ScheduleRepository
 
 @Transactional
 @Service
 class NotificationService(
-    private val notificationRepository: NotificationRepository
+    private val scheduleRepository: ScheduleRepository
 ) {
     /**
-     * 포스트 작성
+     * 스케줄 작성
      */
-    fun addNotification(notificationDto: NotificationDto): String {
-        val notification :Notification = notificationDto.toEntity()
-        notificationRepository.save(notification)
+    fun addSchedule(scheduleDto: ScheduleDto): String {
+        val schedule :Schedule = scheduleDto.toEntity()
+        scheduleRepository.save(schedule)
         return "정상 작동"
     }
 
     /**
-     * 특정 공지사항 보기
+     * 특정 스케줄 보기
      */
-    fun notificationView(id: Long): NotificationDtoResponse{
-        val notification = notificationRepository.findAllById(id)
-            ?: throw InvalidInputException(statusCode = ResultCode.BAD_REQUEST.statusCode,statusMessage = "없는 게시물(${id}) 입니다.", code = ResultCode.BAD_REQUEST.code)
+    fun getSchedule(id: Long): ScheduleDtoResponse{
+        val notification = scheduleRepository.findAllById(id)
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
         return notification.toDto()
     }
+
     /**
      * 해당 월 리스트 뽑아오기
      */
-    fun getMonthNotifications(notificationDateDto: NotificationDateDto): BaseResponse<List<Notification>>{
-        val notificationList = notificationRepository.findAllByStartDateAndEndDate(notificationDateDto.startDate,notificationDateDto.endDate)
-        return BaseResponse(data = notificationList)
+    fun getMonthSchedule(date: String): List<Schedule> {
+        return scheduleRepository.findAllByDate(date)
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
     }
 
 }
