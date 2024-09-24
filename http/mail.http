@@ -1,4 +1,4 @@
-POST localhost:9999/member/mail
+POST localhost:8080/member/mail
 Content-Type: application/json
 
 {
@@ -6,7 +6,7 @@ Content-Type: application/json
 }
 
 ###barbo9510@icloud.com
-POST localhost:9999/member/mailcheck
+POST localhost:8080/member/mailcheck
 Content-Type: application/json
 
 {
