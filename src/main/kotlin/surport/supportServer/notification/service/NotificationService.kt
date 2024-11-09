@@ -6,13 +6,17 @@ import surport.supportServer.notification.entity.Schedule
 import org.springframework.stereotype.Service
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ResultCode
+import surport.supportServer.notification.dto.NotificationDtoResponse
+import surport.supportServer.notification.dto.NotificationListDtoResponse
 import surport.supportServer.notification.dto.ScheduleDtoResponse
+import surport.supportServer.notification.repository.NoticeRepository
 import surport.supportServer.notification.repository.ScheduleRepository
 
 @Transactional
 @Service
 class NotificationService(
-    private val scheduleRepository: ScheduleRepository
+    private val scheduleRepository: ScheduleRepository,
+    private val noticeRepository: NoticeRepository
 ) {
     /**
      * 스케줄 작성
@@ -40,4 +44,21 @@ class NotificationService(
             ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
     }
 
+    /**
+     * 특정 공지 꺼내기
+     */
+    fun getNotification(id: Long): NotificationDtoResponse{
+        val notification = noticeRepository.findAllById(id)
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
+        return notification.toDto()
+    }
+
+    /**
+     * 공지 전체 리스트 꺼내기
+     */
+    fun getNotificationList(): List<NotificationListDtoResponse>{
+        return noticeRepository.findAllNotificationListDtoResponse()
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
+
+    }
 }

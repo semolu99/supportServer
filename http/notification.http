@@ -13,3 +13,6 @@ GET localhost:9999/notifications/1
 ###
 GET localhost:9999/notifications?date=2024-09
 Content-Type: application/json
+###
+GET localhost:8080/notification/list
+###
