@@ -26,3 +26,6 @@ Content-Type: application/json
 DELETE localhost:8080/notification/1/delete
 Content-Type: application/json
 ###
+###
+GET localhost:8080/notification/list
+###

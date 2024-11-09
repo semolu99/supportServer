@@ -3,6 +3,7 @@ package surport.supportServer.notification.controller
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import surport.supportServer.common.dto.BaseResponse
+import surport.supportServer.notification.dto.*
 import surport.supportServer.notification.dto.NotificationDto
 import surport.supportServer.notification.dto.ScheduleDto
 import surport.supportServer.notification.dto.ScheduleDtoResponse
@@ -47,7 +48,23 @@ class NotificationController(
         val result = notificationService.addNotification(notificationDto)
         return BaseResponse(statusMessage = result)
     }
+    /**
+     * 특정 공지 꺼내기
+     */
 
+    @GetMapping("/notification/{id}")
+    fun getNotification(@RequestParam id: Long): BaseResponse<NotificationDtoResponse> {
+        val result = notificationService.getNotification(id)
+        return BaseResponse(data = result, statusMessage = "정상 작동")
+    }
+
+    /**
+     * 공지 전체 리스트 꺼내기
+     */
+    @GetMapping("/notification/list")
+    fun getNotificationList(@RequestParam date: String): List<NotificationListDtoResponse> {
+        return notificationService.getNotificationList()
+    }
     /**
      *  공지사항 삭제
      */

@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ResultCode
 import surport.supportServer.notification.dto.NotificationDto
+import surport.supportServer.notification.dto.NotificationDtoResponse
+import surport.supportServer.notification.dto.NotificationListDtoResponse
 import surport.supportServer.notification.dto.ScheduleDtoResponse
 import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.repository.NotificationRepository
+import surport.supportServer.notification.repository.NoticeRepository
 import surport.supportServer.notification.repository.ScheduleRepository
 
 @Transactional
@@ -17,6 +20,8 @@ import surport.supportServer.notification.repository.ScheduleRepository
 class NotificationService(
     private val scheduleRepository: ScheduleRepository,
     private val notificationRepository: NotificationRepository
+    private val scheduleRepository: ScheduleRepository,
+    private val noticeRepository: NoticeRepository
 ) {
     /**
      * 스케줄 작성
@@ -45,6 +50,22 @@ class NotificationService(
     }
 
     /**
+     * 특정 공지 꺼내기
+     */
+    fun getNotification(id: Long): NotificationDtoResponse{
+        val notification = noticeRepository.findAllById(id)
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
+        return notification.toDto()
+    }
+
+    /**
+     * 공지 전체 리스트 꺼내기
+     */
+    fun getNotificationList(): List<NotificationListDtoResponse>{
+        return noticeRepository.findAllNotificationListDtoResponse()
+            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
+
+    /**
      *  공지사항 작성
      */
     fun addNotification(notificationDto: NotificationDto): String {
@@ -59,5 +80,6 @@ class NotificationService(
     fun deleteNotification(id: Long): String{
         notificationRepository.deleteById(id)
         return "삭제 완료"
+    }
     }
 }

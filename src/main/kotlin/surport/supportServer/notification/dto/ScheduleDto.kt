@@ -103,3 +103,9 @@ data class NotificationDtoResponse(
     val content:String,
     val creationDate:LocalDate
 )
+
+data class NotificationListDtoResponse(
+    val id:Long,
+    val title:String,
+    val creationDate:LocalDate
+)
