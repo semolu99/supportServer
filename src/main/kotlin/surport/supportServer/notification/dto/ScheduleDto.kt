@@ -82,19 +82,19 @@ data class NotificationDto(
     private val _creationDate: String?,
 ){
     val title:String
-        get()=_title!!
+        get() = _title!!
 
     val content:String
-        get()=_content!!
+        get() = _content!!
 
     val creationDate:LocalDate
-        get()=_creationDate!!.toLocalDate()
+        get() = _creationDate!!.toLocalDate()
 
     private fun String.toLocalDate():LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     fun toEntity(): Notification =
-        Notification(id!!, title, content, creationDate)
+        Notification(id, title, content, creationDate)
 }
 
 data class NotificationDtoResponse(
