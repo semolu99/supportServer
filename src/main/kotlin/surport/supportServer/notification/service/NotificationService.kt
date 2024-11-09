@@ -11,15 +11,12 @@ import surport.supportServer.notification.dto.NotificationDtoResponse
 import surport.supportServer.notification.dto.NotificationListDtoResponse
 import surport.supportServer.notification.dto.ScheduleDtoResponse
 import surport.supportServer.notification.entity.Notification
-import surport.supportServer.notification.repository.NotificationRepository
 import surport.supportServer.notification.repository.NoticeRepository
 import surport.supportServer.notification.repository.ScheduleRepository
 
 @Transactional
 @Service
 class NotificationService(
-    private val scheduleRepository: ScheduleRepository,
-    private val notificationRepository: NotificationRepository
     private val scheduleRepository: ScheduleRepository,
     private val noticeRepository: NoticeRepository
 ) {
@@ -61,16 +58,22 @@ class NotificationService(
     /**
      * 공지 전체 리스트 꺼내기
      */
-    fun getNotificationList(): List<NotificationListDtoResponse>{
+    fun getNotificationList(): List<NotificationListDtoResponse> {
         return noticeRepository.findAllNotificationListDtoResponse()
-            ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
+            ?: throw InvalidInputException(
+                statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,
+                statusMessage = ResultCode.NOT_FIND_SCHEDULE.message,
+                code = ResultCode.NOT_FIND_SCHEDULE.code
+            )
+    }
+
 
     /**
      *  공지사항 작성
      */
     fun addNotification(notificationDto: NotificationDto): String {
         val notification: Notification = notificationDto.toEntity() // 수정된 부분
-        notificationRepository.save(notification)
+        noticeRepository.save(notification)
         return "정상 작동"
     }
 
@@ -78,8 +81,7 @@ class NotificationService(
      *  공지사항 삭제
      */
     fun deleteNotification(id: Long): String{
-        notificationRepository.deleteById(id)
+        noticeRepository.deleteById(id)
         return "삭제 완료"
-    }
     }
 }

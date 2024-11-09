@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
 import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.dto.NotificationListDtoResponse
-import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.entity.Schedule
 
 @Repository
@@ -23,11 +22,6 @@ interface NoticeRepository : JpaRepository<Notification, Long>{
 
     @Query("SELECT new surport.supportServer.notification.dto.NotificationListDtoResponse(n.id, n.title, n.creationDate) FROM Notification n")
     fun findAllNotificationListDtoResponse(): List<NotificationListDtoResponse>?
-}
 
-
-
-@Repository
-interface NotificationRepository : JpaRepository<Notification, Long> {
     fun deleteById(id: Long?)
 }
