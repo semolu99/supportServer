@@ -15,7 +15,7 @@ import java.lang.RuntimeException
 import java.time.LocalDateTime
 import java.util.*
 
-
+const val MILLISECOND: Long = 1000
 const val ACCESS_EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 30
 const val REFRESH_EXPIRATION_MILLISECONDS: Long = 1000 * 60 * 60 * 24 * 24
 
@@ -38,11 +38,11 @@ class JwtTokenProvider {
             .joinToString(",", transform = GrantedAuthority::getAuthority)
 
         val now = Date()
-        println("*$now")
+        //println("*$now")
         val accessExpiration = Date(now.time + ACCESS_EXPIRATION_MILLISECONDS)
         val refreshExpiration = Date(now.time + REFRESH_EXPIRATION_MILLISECONDS)
-        println("*$accessExpiration")
-        println("*$refreshExpiration")
+        //println("*$accessExpiration")
+        //println("*$refreshExpiration")
         // Access Token
         val accessToken = Jwts
             .builder()
