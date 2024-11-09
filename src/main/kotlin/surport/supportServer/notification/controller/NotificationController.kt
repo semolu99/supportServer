@@ -37,4 +37,6 @@ class NotificationController(
     fun getSchedule(@RequestParam date: String): List<Schedule> {
         return notificationService.getMonthSchedule(date)
     }
+
+
 }
