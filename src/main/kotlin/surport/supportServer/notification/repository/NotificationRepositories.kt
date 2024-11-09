@@ -3,6 +3,7 @@ package surport.supportServer.notification.repository
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.stereotype.Repository
+import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.entity.Schedule
 
 @Repository
@@ -14,3 +15,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long>{
     fun findAllByDate(date: String): List<Schedule>?
 }
 
+@Repository
+interface NotificationRepository : JpaRepository<Notification, Long> {
+    fun deleteById(id: Long?)
+}

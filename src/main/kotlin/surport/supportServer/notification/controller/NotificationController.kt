@@ -3,6 +3,7 @@ package surport.supportServer.notification.controller
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import surport.supportServer.common.dto.BaseResponse
+import surport.supportServer.notification.dto.NotificationDto
 import surport.supportServer.notification.dto.ScheduleDto
 import surport.supportServer.notification.dto.ScheduleDtoResponse
 import surport.supportServer.notification.entity.Schedule
@@ -38,5 +39,21 @@ class NotificationController(
         return notificationService.getMonthSchedule(date)
     }
 
+    /**
+     *  공지사항 작성
+     */
+    @PostMapping("/notification/add")
+    fun addNotification(@RequestBody @Valid notificationDto: NotificationDto): BaseResponse<Unit> {
+        val result = notificationService.addNotification(notificationDto)
+        return BaseResponse(statusMessage = result)
+    }
 
+    /**
+     *  공지사항 삭제
+     */
+    @DeleteMapping("/notification/{id}/delete")
+    fun deleteNotification(@PathVariable id: Long): BaseResponse<Unit> {
+        val result = notificationService.deleteNotification(id);
+        return BaseResponse(statusMessage = result)
+    }
 }

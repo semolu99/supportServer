@@ -6,13 +6,17 @@ import surport.supportServer.notification.entity.Schedule
 import org.springframework.stereotype.Service
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ResultCode
+import surport.supportServer.notification.dto.NotificationDto
 import surport.supportServer.notification.dto.ScheduleDtoResponse
+import surport.supportServer.notification.entity.Notification
+import surport.supportServer.notification.repository.NotificationRepository
 import surport.supportServer.notification.repository.ScheduleRepository
 
 @Transactional
 @Service
 class NotificationService(
-    private val scheduleRepository: ScheduleRepository
+    private val scheduleRepository: ScheduleRepository,
+    private val notificationRepository: NotificationRepository
 ) {
     /**
      * 스케줄 작성
@@ -40,4 +44,20 @@ class NotificationService(
             ?: throw InvalidInputException(statusCode = ResultCode.NOT_FIND_SCHEDULE.statusCode,statusMessage = ResultCode.NOT_FIND_SCHEDULE.message, code = ResultCode.NOT_FIND_SCHEDULE.code)
     }
 
+    /**
+     *  공지사항 작성
+     */
+    fun addNotification(notificationDto: NotificationDto): String {
+        val notification: Notification = notificationDto.toEntity() // 수정된 부분
+        notificationRepository.save(notification)
+        return "정상 작동"
+    }
+
+    /**
+     *  공지사항 삭제
+     */
+    fun deleteNotification(id: Long): String{
+        notificationRepository.deleteById(id)
+        return "삭제 완료"
+    }
 }

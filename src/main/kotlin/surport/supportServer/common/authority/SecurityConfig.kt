@@ -31,7 +31,7 @@ class SecurityConfig(
             .authorizeHttpRequests{
                 it.requestMatchers("/member/signup","/member/login","/member/mail","/member/mailcheck","/member/mail/find", "/member/test", "/schedule/**").anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
-                    .requestMatchers("/admin/**").hasRole("ADMIN")
+                    .requestMatchers("/admin/**","/notification/**","/schedule/add").hasRole("ADMIN")
                     .anyRequest().permitAll()
 
             }
