@@ -6,27 +6,39 @@ import java.util.concurrent.TimeUnit
 
 @Repository
 class MailRepositoryRedis(
-    private val redisTemplate: RedisTemplate<String, String>
+    private val mailRedisTemplate: RedisTemplate<String, String>,
+    private val checkedRedisTemplate : RedisTemplate<String, Boolean>
 ) {
     companion object{
         private const val KEY_PREFIX = "mail"
     }
-    private val timeout: Long = 1000 * 60 * 10
+    private val timeOutMail: Long = 1000 * 60 * 10
+    private val timeOutMailChecked:Long = 1000 * 60 * 30
 
-    fun save(loginId: String, mailCode: String){
-//        val key = "$KEY_PREFIX:$loginId:$mailCode"
-//        redisTemplate.opsForValue().set(key, "", timeout, TimeUnit.MILLISECONDS)
-        redisTemplate.opsForValue().set(loginId, mailCode, timeout, TimeUnit.MILLISECONDS)
+    fun saveMail(loginId: String, mailCode: String){
+        mailRedisTemplate.opsForValue().set(loginId, mailCode, timeOutMail, TimeUnit.MILLISECONDS)
+    }
+
+    fun saveChecked(loginId: String){
+        val checked = false
+        checkedRedisTemplate.opsForValue().set(loginId, checked, timeOutMailChecked, TimeUnit.MILLISECONDS)
     }
 
     fun findByMailCode(loginId: String) :String? {
         //val key = redisTemplate.keys("$KEY_PREFIX:*:$mailCode").firstOrNull()
-        val key = redisTemplate.keys(loginId).firstOrNull()
-        return key?.let { redisTemplate.opsForValue().get(it) }
+        val key = mailRedisTemplate.keys(loginId).firstOrNull()
+        return key?.let { mailRedisTemplate.opsForValue().get(it) }
     }
 
-    fun deleteByLoginId(loginId: String){
-        val key = redisTemplate.keys(loginId)
-        redisTemplate.delete(key)
+    fun deleteMailByLoginId(loginId: String){
+        val key = mailRedisTemplate.keys(loginId)
+        mailRedisTemplate.delete(key)
+        saveChecked(loginId)
     }
+
+    fun deleteCheckByLoginId(loginId: String){
+        val key = mailRedisTemplate.keys(loginId)
+        mailRedisTemplate.delete(key)
+    }
+
 }

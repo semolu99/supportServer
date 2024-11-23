@@ -43,7 +43,7 @@ class MemberService(
 
         val randomString = mailUtility.sendMail(mailDto)
 
-        mailRepositoryRedis.save(mailDto.loginId, randomString)
+        mailRepositoryRedis.saveMail(mailDto.loginId, randomString)
 
         return "메일을 성공적으로 보냈습니다."
     }
@@ -54,12 +54,10 @@ class MemberService(
     fun mailCheck(loginId: String, authCode: String):String {
         val mail = mailRepositoryRedis.findByMailCode(loginId)
             ?: throw InvalidInputException(ResultCode.MAIL_ERROR.statusCode, ResultCode.MAIL_ERROR.message, ResultCode.MAIL_ERROR.code,)
-        println(mail)
         if(authCode != mail){
             throw InvalidInputException(ResultCode.MAIL_ERROR.statusCode,ResultCode.MAIL_ERROR.message, ResultCode.MAIL_ERROR.code)
         }
-        mailRepositoryRedis.deleteByLoginId(loginId)
-
+        mailRepositoryRedis.deleteMailByLoginId(loginId)
         return "정상 확인 되었습니다"
     }
 
@@ -79,6 +77,8 @@ class MemberService(
 
         val memberRole = MemberRole(null, ROLE.MEMBER, member)
         memberRoleRepository.save(memberRole)
+
+        mailRepositoryRedis.deleteCheckByLoginId(member.loginId)
 
         return "회원가입이 완료 되었습니다."
     }
