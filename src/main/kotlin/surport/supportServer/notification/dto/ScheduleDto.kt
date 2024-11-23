@@ -2,6 +2,8 @@ package surport.supportServer.notification.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.*
+import surport.supportServer.common.exception.InvalidInputException
+import surport.supportServer.common.status.ResultCode
 import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.entity.Schedule
 import java.time.LocalDate
@@ -39,8 +41,8 @@ data class ScheduleDto(
     private val _endDate: String?,
 
     @NotBlank
-    @field:Min(value = 1, message = "색상 값은 1 이상이어야 합니다.")
-    @field:Max(value = 5, message = "색상 값은 5 이하이어야 합니다.")
+    @field:Min(value = 1)
+    @field:Max(value = 5)
     @JsonProperty("color")
     private val _color: String? ="6",
 ){
@@ -64,6 +66,10 @@ data class ScheduleDto(
 
     fun toEntity(): Schedule =
         Schedule(id, title, content, startDate, endDate, color)
+
+    fun dateCompare(startDate: LocalDate, endDate: LocalDate){
+        if(endDate < startDate) throw InvalidInputException(ResultCode.WRONG_DATE.statusCode,ResultCode.WRONG_DATE.message, ResultCode.WRONG_DATE.code)
+    }
 }
 
 data class ScheduleDtoResponse(
@@ -92,10 +98,9 @@ data class NotificationDto(
     @JsonProperty("content")
     private val _content: String?,
 
-    @field:NotBlank(message = "날짜를 입력해주세요.")
+    @field:NotBlank
     @field:Pattern(
         regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
-        message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
     )
     @JsonProperty("creationDate")
     private val _creationDate: String?,

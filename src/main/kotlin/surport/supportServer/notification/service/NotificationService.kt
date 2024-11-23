@@ -25,6 +25,7 @@ class NotificationService(
      */
     fun addSchedule(scheduleDto: ScheduleDto): String {
         val schedule :Schedule = scheduleDto.toEntity()
+        scheduleDto.dateCompare(scheduleDto.startDate,scheduleDto.endDate)
         scheduleRepository.save(schedule)
         return "정상 작동"
     }

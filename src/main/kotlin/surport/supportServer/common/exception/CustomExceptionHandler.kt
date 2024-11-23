@@ -109,7 +109,7 @@ class CustomExceptionHandler {
         //val pat
         return when (fieldError.code) {
 
-            "NotBlank", "Pattern", "ValidEnum", "Max", "Min", "NotNull" -> when (fieldError.field) {
+            "NotBlank", "Pattern", "ValidEnum", "Max", "Min" -> when (fieldError.field) {
                 "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
                 "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
                 "_nickname" -> ResultCode.WRONG_FORMAT_NICKNAME
@@ -127,20 +127,6 @@ class CustomExceptionHandler {
                 "_color" -> ResultCode.WRONG_FORMAT_COLOR
                 else -> ResultCode.BAD_REQUEST // 기본 에러 코드
             }
-            /*"Pattern" -> when  (fieldError.field){
-                "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
-                "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
-                "_newPassword" -> ResultCode.WRONG_FORMAT_NEW_PASSWORD
-                "_startDate" -> ResultCode.WRONG_FORMAT_START_DATE
-                "_endDate" -> ResultCode.WRONG_FORMAT_END_DATE
-                "_creationDate" -> ResultCode.WRONG_FORMAT_CREATION_DATE
-                else -> ResultCode.BAD_REQUEST
-            }
-            "ValidEnum" -> when (fieldError.field){
-                "_gender" -> ResultCode.WRONG_FORMAT_GENDER
-                "_dormType" -> ResultCode.WRONG_FORMAT_DORM_TYPE
-                else -> ResultCode.BAD_REQUEST
-            }*/
             else -> ResultCode.BAD_REQUEST // 기본 에러 코드
         }
     }

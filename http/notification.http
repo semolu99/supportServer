@@ -6,7 +6,7 @@ Authorization: Bearer {{adminToken}}
 {
   "title":"제목입니다",
   "content":"내용입니다",
-  "startDate":"2024-08-10",
+  "startDate":"2024-08-20",
   "endDate":"2024-08-16",
   "color":4
 }
