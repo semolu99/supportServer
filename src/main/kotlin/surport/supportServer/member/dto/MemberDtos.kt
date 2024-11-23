@@ -43,15 +43,12 @@ data class MemberDtoRequest(
 
     @field:NotBlank
     @JsonProperty("dormType")
-    @field:Pattern(
-        regexp = "^.{3,6}"
-    )
     @field:ValidEnum(enumClass = Dorm_type::class)
     private val _dormType: String?,
 
-    @field:NotNull
+    @field:NotBlank
     @JsonProperty("dormNo")
-    private val _dormNo: Int?,
+    private val _dormNo: String?,
 
     @JsonProperty("roomNo")
     private val _roomNo: Int?,
@@ -69,7 +66,7 @@ data class MemberDtoRequest(
     val dormType: Dorm_type
         get() = Dorm_type.valueOf(_dormType!!)
     val dormNo: Int
-        get() = _dormNo!!
+        get() = _dormNo!!.toInt()
     val roomNo: Int?
         get() = _roomNo?.coerceIn(1, 3) ?: 0
 

@@ -36,9 +36,7 @@ class CustomExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     protected fun methodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<String>> {
         val errors = ex.bindingResult.fieldErrors
-        val errorMessages = errors.joinToString(", ") { fieldError ->
-            getErrorCode(fieldError).message
-        }
+        val errorMessages = getErrorCode(errors.firstOrNull()!!).message
         val combinedErrorCode = getCombinedErrorCode(errors)
 
         return ResponseEntity(
