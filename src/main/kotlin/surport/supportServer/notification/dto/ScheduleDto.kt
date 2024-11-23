@@ -13,10 +13,16 @@ data class ScheduleDto(
     var id: Long?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,100}"
+    )
     @JsonProperty("title")
     private val _title: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,1000}"
+    )
     @JsonProperty("content")
     private val _content: String?,
 
@@ -67,10 +73,16 @@ data class NotificationDto(
     var id: Long?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,100}"
+    )
     @JsonProperty("title")
     private val _title: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,1000}"
+    )
     @JsonProperty("content")
     private val _content: String?,
 

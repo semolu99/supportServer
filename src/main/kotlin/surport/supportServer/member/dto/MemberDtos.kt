@@ -31,16 +31,25 @@ data class MemberDtoRequest(
     private val _password: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{1,10}"
+    )
     @JsonProperty("nickname")
     private val _nickname: String?,
 
     @field:NotBlank
     @field:ValidEnum(enumClass = Gender::class)
+    @field:Pattern(
+        regexp = "^.{3,5}"
+    )
     @JsonProperty("gender")
     private val _gender: String?,
 
     @field:NotBlank
     @JsonProperty("dormType")
+    @field:Pattern(
+        regexp = "^.{3,6}"
+    )
     @field:ValidEnum(enumClass = Dorm_type::class)
     private val _dormType: String?,
 
@@ -74,6 +83,9 @@ data class MemberDtoRequest(
 
 data class LoginDto(
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,30}"
+    )
     @JsonProperty("loginId")
     private val _loginId: String?,
 
@@ -120,15 +132,24 @@ data class MemberUpdateDto(
     var id: Long,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,10}"
+    )
     @JsonProperty("nickname")
     private val _nickname: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,5}"
+    )
     @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMEN 중 하나를 선택 해 주세요.")
     @JsonProperty("gender")
     private val _gender: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,6}"
+    )
     @field:ValidEnum(enumClass = Dorm_type::class, message = "알맞은 값을 선택 해 주세요.")
     @JsonProperty("dormType")
     private val _dormType: String?,
@@ -155,7 +176,10 @@ data class MemberUpdateDto(
 data class MailDto(
     var id: Long?,
 
-    @field:NotBlank
+    @field:NotBlank(message = "아이디를 입력해 주세요")
+    @field:Pattern(
+        regexp = "^.{3,30}"
+    )
     @JsonProperty("loginId")
     private val _loginId: String?,
 
@@ -170,6 +194,9 @@ data class MailDto(
 
 data class MailCheckDto(
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,30}"
+    )
     @JsonProperty("loginId")
     private val _loginId: String?,
 
@@ -185,6 +212,9 @@ data class MailCheckDto(
 
 data class AddAdminDto(
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,30}"
+    )
     @JsonProperty("loginId")
     private val _loginId: String?,
 ){

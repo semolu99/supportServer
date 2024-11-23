@@ -1,5 +1,5 @@
 ###
-POST localhost:8080/notifications
+POST localhost:8080/schedule
 Content-Type: application/json
 
 {
