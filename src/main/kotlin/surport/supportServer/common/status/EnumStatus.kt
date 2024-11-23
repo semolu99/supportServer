@@ -49,6 +49,7 @@ enum class ResultCode(val statusCode: Int,val code: String, val message: String)
     WRONG_FORMAT_CREATION_DATE(HttpStatus.BAD_REQUEST.value(),"ERR155", "생성 일을 형식에 맞게 작성해 주세요.."), // 안쓸 가능성 존재
     NOT_FIND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "ERR156","스케줄을 찾을 수 없습니다."), // 403
     NOT_FIND_NOTIFICATION(HttpStatus.NOT_FOUND.value(), "ERR157","공지사항을 찾을 수 없습니다."),
+    WRONG_FORMAT_COLOR(HttpStatus.NOT_FOUND.value(), "ERR158","색상을 찾을 수 없습니다."),
     //Token, Auth
     INVALID_DATA(HttpStatus.BAD_REQUEST.value(), "ERR401","데이터 처리 오류 발생"), // 400
     TOKEN_EXPIRED(HttpStatus.FORBIDDEN.value(), "EER402","토큰이 만료 되었습니다"), // 403

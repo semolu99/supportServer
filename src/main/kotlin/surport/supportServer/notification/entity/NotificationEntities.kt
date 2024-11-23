@@ -25,9 +25,13 @@ class Schedule(
     @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
     val endDate: LocalDate,
+
+    @Column(nullable = false, length = 1)
+    @Temporal(TemporalType.DATE)
+    val color: Int,
 ) {
     fun toDto(): ScheduleDtoResponse =
-        ScheduleDtoResponse(id!!, title, content, startDate, endDate)
+        ScheduleDtoResponse(id!!, title, content, startDate, endDate, color)
 
 }
 

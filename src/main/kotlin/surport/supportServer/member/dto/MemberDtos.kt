@@ -75,7 +75,7 @@ data class MemberDtoRequest(
     val dormNo: Int
         get() = _dormNo!!
     val roomNo: Int?
-        get() = _roomNo
+        get() = _roomNo?.coerceIn(1, 3) ?: 0
 
     fun toEntity(): Member =
         Member(id, loginId,password,nickname,gender, dormType, dormNo, roomNo)
@@ -170,7 +170,7 @@ data class MemberUpdateDto(
     val dormNo: Int?
         get() = _dormNo
     val roomNo: Int?
-        get() = _roomNo
+        get() = _roomNo?.coerceIn(1, 3) ?: 0
 }
 
 data class MailDto(
