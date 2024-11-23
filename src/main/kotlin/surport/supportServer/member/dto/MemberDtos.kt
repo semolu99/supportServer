@@ -67,7 +67,7 @@ data class MemberDtoRequest(
         get() = Dorm_type.valueOf(_dormType!!)
     val dormNo: Int
         get() = _dormNo!!.toInt()
-    val roomNo: Int?
+    val roomNo: Int
         get() = _roomNo?.coerceIn(1, 3) ?: 0
 
     fun toEntity(): Member =
