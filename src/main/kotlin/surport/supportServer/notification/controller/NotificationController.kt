@@ -35,9 +35,9 @@ class NotificationController(
     /**
      * 스케줄 월별 리스트
      */
-    @GetMapping("/schedule/list")
-    fun getSchedule(@RequestParam date: String): List<Schedule> {
-        return notificationService.getMonthSchedule(date)
+    @GetMapping("/schedule")
+    fun getSchedule(@RequestParam date: String): BaseResponse<List<Schedule>> {
+        return BaseResponse(data = notificationService.getMonthSchedule(date))
     }
 
     /**
@@ -59,11 +59,19 @@ class NotificationController(
     }
 
     /**
+     * 특적 공지 수정
+     */
+    @PutMapping("/notification/edit")
+    fun putNotification(@RequestBody @Valid notificationDto:NotificationDto):BaseResponse<Unit> {
+        val result = notificationService.putNotification(notificationDto)
+        return BaseResponse(statusMessage = result)
+    }
+    /**
      * 공지 전체 리스트 꺼내기
      */
-    @GetMapping("/notification/list")
-    fun getNotificationList(): List<NotificationListDtoResponse> {
-        return notificationService.getNotificationList()
+    @GetMapping("/notification")
+    fun getNotificationList():  BaseResponse<List<NotificationListDtoResponse>> {
+        return BaseResponse(data = notificationService.getNotificationList())
     }
     /**
      *  공지사항 삭제

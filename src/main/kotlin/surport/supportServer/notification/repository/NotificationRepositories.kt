@@ -14,6 +14,7 @@ interface ScheduleRepository : JpaRepository<Schedule, Long>{
     //@Query("SELECT e FROM Notification e WHERE e.startDate >= :startDate OR e.endDate <= :endDate")
     @Query("SELECT * FROM schedule e where e.id in (select notification_ids.id from(select i.id ,substring(i.start_date,1,7) as sd, substring(i.end_date ,1,7) as ed from schedule i) notification_ids where notification_ids.sd = :date or notification_ids.ed = :date)", nativeQuery = true)
     fun findAllByDate(date: String): List<Schedule>?
+
 }
 
 @Repository
@@ -22,8 +23,6 @@ interface NoticeRepository : JpaRepository<Notification, Long>{
 
     @Query("SELECT new surport.supportServer.notification.dto.NotificationListDtoResponse(n.id, n.title, n.creationDate) FROM Notification n")
     fun findAllNotificationListDtoResponse(): List<NotificationListDtoResponse>?
-
-    fun deleteById(id: Long?)
 
     fun findNotificationById(id:Long):Notification?
 }

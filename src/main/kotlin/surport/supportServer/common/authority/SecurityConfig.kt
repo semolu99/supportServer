@@ -29,9 +29,21 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests{
-                it.requestMatchers("/member/signup","/member/login","/member/mail","/member/mailcheck","/member/mail/find", "/member/test", "/schedule/**","/notification/{id}","/notification/list").anonymous()
+                it.requestMatchers(
+                    "/member/signup",
+                    "/member/login",
+                    "/member/mail",
+                    "/member/mailcheck",
+                    "/member/mail/find",
+                    "/member/test",
+                ).anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
-                    .requestMatchers("/admin/**","/notification/**","/schedule/add").hasRole("ADMIN")
+                    .requestMatchers(
+                        "/notification/add",
+                        "/notification/edit",
+                        "/notification/*/delete",
+                        "/schedule/add",
+                    ).hasRole("ADMIN")
                     .anyRequest().permitAll()
 
             }

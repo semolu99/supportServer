@@ -1,6 +1,7 @@
 ###
 POST localhost:8080/schedule/add
 Content-Type: application/json
+Authorization: Bearer {{adminToken}}
 
 {
   "title":"제목입니다",
@@ -12,25 +13,32 @@ Content-Type: application/json
 ###
 ###
 GET localhost:8080/schedule/1
-Content-Type: application/json
+###
+GET localhost:8080/schedule?date=2024-08
 ###
 POST localhost:8080/notification/add
+Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
   "title":"제목",
-  "content":"내용",
-  "creationDate":"2024-11-09"
+  "content":"내용"
 }
 ###
-GET localhost:8080/notification/1
+GET localhost:8080/notification
 ###
-GET localhost:8080/notification?date=2024-09
-Content-Type: application/json
+GET localhost:8080/notification/2
 ###
-DELETE localhost:8080/notification/1/delete
+PUT localhost:8080/notification/edit
 Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "id": 2,
+  "title": "aㅁㅁㅁㅁㅁㅁㅁ",
+  "content": "ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ"
+}
 ###
-###
-GET localhost:8080/notification/list
+DELETE localhost:8080/notification/2/delete
+Authorization: Bearer {{adminToken}}
 ###

@@ -45,8 +45,8 @@ POST localhost:8080/member/login
 Content-Type: application/json
 
 {
-  "loginId":"2101817",
-  "password":"qwer1234*"
+  "loginId":"admin",
+  "password":"adminpassword"
 }
 > {%
     client.global.set("adminToken",response.body.data.accessToken);
