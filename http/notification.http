@@ -1,13 +1,18 @@
 ###
-POST localhost:8080/notifications
+POST localhost:8080/schedule/add
 Content-Type: application/json
 
 {
-  "title":"오늘 점심 21",
-  "content":"내용",
+  "title":"제목입니다",
+  "content":"내용입니다",
   "startDate":"2024-08-10",
-  "endDate":"2024-08-16"
+  "endDate":"2024-08-16",
+  "color":4
 }
+###
+###
+GET localhost:8080/schedule/1
+Content-Type: application/json
 ###
 POST localhost:8080/notification/add
 Content-Type: application/json
@@ -18,13 +23,13 @@ Content-Type: application/json
   "creationDate":"2024-11-09"
 }
 ###
-GET localhost:9999/notifications/1
+GET localhost:8080/notification/1
 ###
-GET localhost:9999/notifications?date=2024-09
+GET localhost:8080/notification?date=2024-09
 Content-Type: application/json
 ###
 DELETE localhost:8080/notification/1/delete
-Content-Type: application/json
+Authorization: Bearer {{adminToken}}
 ###
 ###
 GET localhost:8080/notification/list

@@ -12,22 +12,26 @@ class Schedule(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     val title: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     val content: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
     val startDate: LocalDate,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
     val endDate: LocalDate,
+
+    @Column(nullable = false, length = 1)
+    @Temporal(TemporalType.DATE)
+    val color: Int,
 ) {
     fun toDto(): ScheduleDtoResponse =
-        ScheduleDtoResponse(id!!, title, content, startDate, endDate)
+        ScheduleDtoResponse(id!!, title, content, startDate, endDate, color)
 
 }
 
@@ -37,13 +41,13 @@ class Notification(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long?= null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     val title: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 1000)
     val content: String,
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
     val creationDate: LocalDate,
 ) {

@@ -1,9 +1,7 @@
 package surport.supportServer.notification.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import jakarta.validation.constraints.NotBlank
-import jakarta.validation.constraints.Pattern
-import jakarta.validation.constraints.Size
+import jakarta.validation.constraints.*
 import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.entity.Schedule
 import java.time.LocalDate
@@ -13,10 +11,16 @@ data class ScheduleDto(
     var id: Long?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{1,100}"
+    )
     @JsonProperty("title")
     private val _title: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{1,1000}"
+    )
     @JsonProperty("content")
     private val _content: String?,
 
@@ -35,6 +39,11 @@ data class ScheduleDto(
     )
     @JsonProperty("endDate")
     private val _endDate: String?,
+
+    @field:Min(value = 1, message = "색상 값은 1 이상이어야 합니다.")
+    @field:Max(value = 5, message = "색상 값은 5 이하이어야 합니다.")
+    @JsonProperty("color")
+    private val _color: Int?,
 ){
     val title:String
         get()=_title!!
@@ -48,11 +57,14 @@ data class ScheduleDto(
     val endDate:LocalDate
         get()=_endDate!!.toLocalDate()
 
+    val color:Int
+        get() = _color!!
+
     private fun String.toLocalDate():LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     fun toEntity(): Schedule =
-        Schedule(id, title, content, startDate, endDate)
+        Schedule(id, title, content, startDate, endDate, color)
 }
 
 data class ScheduleDtoResponse(
@@ -60,17 +72,24 @@ data class ScheduleDtoResponse(
     val title:String,
     val content:String,
     val startDate:LocalDate,
-    val endDate:LocalDate
+    val endDate:LocalDate,
+    val color:Int,
 )
 
 data class NotificationDto(
     var id: Long?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{1,100}"
+    )
     @JsonProperty("title")
     private val _title: String?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{1,1000}"
+    )
     @JsonProperty("content")
     private val _content: String?,
 

@@ -40,6 +40,17 @@ Content-Type: application/json
  client.global.set("acToken",response.body.data.accessToken);
  client.global.set("reToken",response.body.data.refreshToken);
 %}
+###어드민 로그인
+POST localhost:8080/member/login
+Content-Type: application/json
+
+{
+  "loginId":"2101817",
+  "password":"qwer1234*"
+}
+> {%
+    client.global.set("adminToken",response.body.data.accessToken);
+%}
 
 ###로그인
 POST localhost:8080/member/login
@@ -55,4 +66,18 @@ GET localhost:8080/member/info
 Authorization: Bearer {{acToken}}
 
 ### 비밀번호 찾기
-POST localhost:8080/member/mail/find?loginId=barbo9510
+POST localhost:8080/member/mail/find?loginId=2101817
+
+### 내 정보 수정
+PUT localhost:8080/member/info
+Content-Type: application/json
+Authorization: Bearer {{acToken}}
+
+{
+  "nickname":"수원대행정실",
+  "gender":"WOMAN",
+  "dormType":"GyungM",
+  "dormNo":876,
+  "roomNo": null
+}
+###
