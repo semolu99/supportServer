@@ -8,8 +8,10 @@ import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.authentication.BadCredentialsException
+import org.springframework.util.ExceptionTypeFilter
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
+import org.springframework.web.ErrorResponse
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -24,11 +26,29 @@ import java.security.SignatureException
 @RestControllerAdvice
 class CustomExceptionHandler {
 
-    // @Valid 어노테이션이 사용될때, DTO 검증 실패시 예외처리
+    /*// @Valid 어노테이션이 사용될때, DTO 검증 실패시 예외처리
     @ExceptionHandler(MethodArgumentNotValidException::class)
     protected fun methodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<String>> {
         val error = ex.bindingResult.allErrors[0]
         return ResponseEntity(BaseResponse(statusCode = ResultCode.BAD_REQUEST.statusCode, statusMessage = (error as FieldError).field.replaceFirst("_","") + ": " + error.defaultMessage, code = ResultCode.BAD_REQUEST.code), HttpStatus.BAD_REQUEST)
+    }*/
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    protected fun methodArgumentNotValidException(ex: MethodArgumentNotValidException): ResponseEntity<BaseResponse<String>> {
+        val errors = ex.bindingResult.fieldErrors
+        val errorMessages = errors.joinToString(", ") { fieldError ->
+            getErrorCode(fieldError).message
+        }
+        val combinedErrorCode = getCombinedErrorCode(errors)
+
+        return ResponseEntity(
+            BaseResponse(
+                statusCode = ResultCode.BAD_REQUEST.statusCode,
+                statusMessage = errorMessages,
+                code = combinedErrorCode
+            ),
+            HttpStatus.BAD_REQUEST
+        )
     }
 
     /// 매개변수 값이 올바르게 처리 되지 않았을때 에러처리
@@ -36,6 +56,12 @@ class CustomExceptionHandler {
     protected fun illegalArgumentException(ex: IllegalArgumentException): ResponseEntity<BaseResponse<String>> {
         return ResponseEntity(BaseResponse(statusCode = ResultCode.BAD_REQUEST.statusCode, statusMessage = ex.message, code = ResultCode.BAD_REQUEST.code), HttpStatus.BAD_REQUEST)
     }
+//    ///런타임 에러 처리
+//    @ExceptionHandler(RuntimeException::class)
+//    protected fun runTimeException(ex: RuntimeException): ResponseEntity<BaseResponse<String>>{
+//        return ResponseEntity(BaseResponse(statusCode = ResultCode.BAD_REQUEST.statusCode, statusMessage = ResultCode.BAD_REQUEST.message, code = ResultCode.BAD_REQUEST.code), HttpStatus.BAD_REQUEST
+//        )
+//    }
 
     // 기본적인 에러 처리
     @ExceptionHandler(Exception::class)
@@ -48,6 +74,7 @@ class CustomExceptionHandler {
             is SignatureException, is SecurityException, is MalformedJwtException -> ResultCode.INVALID_ACCESS_TOKEN
             is ExpiredJwtException -> ResultCode.TOKEN_EXPIRED
             is NoHandlerFoundException -> ResultCode.NOT_FOUND
+            is RuntimeException -> ResultCode.RUN_TIME_ERROR
             else -> ResultCode.INTERNAL_SERVER_ERROR
         }
 
@@ -74,5 +101,53 @@ class CustomExceptionHandler {
     @ExceptionHandler(InvalidInputException::class)
     protected fun apiCustomException(ex: InvalidInputException): ResponseEntity<BaseResponse<String>> {
         return ResponseEntity(BaseResponse(statusCode = ex.statusCode, statusMessage = ex.statusMessage, code = ex.code), HttpStatus.BAD_REQUEST)
+    }
+
+    // 에러 코드(및 메시지)를 반환하는 헬퍼 메서드
+    private fun getErrorCode(fieldError: FieldError): ResultCode {
+        val not = "NotBlank"
+        //val pat
+        return when (fieldError.code) {
+
+            "NotBlank", "Pattern" -> when (fieldError.field) {
+                "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
+                "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
+                "_nickname" -> ResultCode.WRONG_FORMAT_NICKNAME
+                "_gender" -> ResultCode.WRONG_FORMAT_GENDER
+                "_dormType" -> ResultCode.WRONG_FORMAT_DORM_TYPE
+                "_dormNo" -> ResultCode.WRONG_FORMAT_DORM_NUMBER
+                "_currentPassword" -> ResultCode.WRONG_FORMAT_CURRENT_PASSWORD
+                "_newPassword" -> ResultCode.WRONG_FORMAT_NEW_PASSWORD
+                "_title" -> ResultCode.WRONG_FORMAT_TITLE
+                "_content" -> ResultCode.WRONG_FORMAT_CONTENT
+                "_startDate" -> ResultCode.WRONG_FORMAT_START_DATE
+                "_endDate" -> ResultCode.WRONG_FORMAT_END_DATE
+                "_creationDate" -> ResultCode.WRONG_FORMAT_CREATION_DATE
+                "_authCode" -> ResultCode.WRONG_FORMAT_AUTH_CODE
+                else -> ResultCode.BAD_REQUEST // 기본 에러 코드
+            }
+            /*"Pattern" -> when  (fieldError.field){
+                "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
+                "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
+                "_newPassword" -> ResultCode.WRONG_FORMAT_NEW_PASSWORD
+                "_startDate" -> ResultCode.WRONG_FORMAT_START_DATE
+                "_endDate" -> ResultCode.WRONG_FORMAT_END_DATE
+                "_creationDate" -> ResultCode.WRONG_FORMAT_CREATION_DATE
+                else -> ResultCode.BAD_REQUEST
+            }*/
+            "ValidEnum" -> when (fieldError.field){
+                "_gender" -> ResultCode.WRONG_FORMAT_GENDER
+                "_dormType" -> ResultCode.WRONG_FORMAT_DORM_TYPE
+                else -> ResultCode.BAD_REQUEST
+            }
+            else -> ResultCode.BAD_REQUEST // 기본 에러 코드
+        }
+    }
+
+    // 첫 번째 에러 코드에 맞는 코드만 반환하는 헬퍼 메서드
+    private fun getCombinedErrorCode(errors: List<FieldError>): String {
+        return errors.firstOrNull()?.let { fieldError ->
+            getErrorCode(fieldError).code
+        } ?: ResultCode.BAD_REQUEST.code
     }
 }

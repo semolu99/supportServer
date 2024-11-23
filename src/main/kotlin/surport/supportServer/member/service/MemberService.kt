@@ -5,8 +5,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder
-import surport.supportServer.member.entity.Member
-import surport.supportServer.member.repository.MemberRepository
 import org.springframework.stereotype.Service
 import surport.supportServer.common.authority.JwtTokenProvider
 import surport.supportServer.common.authority.TokenInfo
@@ -17,13 +15,10 @@ import surport.supportServer.common.repository.RefreshTokenIngoRepositoryRedis
 import surport.supportServer.common.status.ROLE
 import surport.supportServer.common.status.ResultCode
 import surport.supportServer.member.dto.*
-//import surport.supportServer.member.entity.Mail
+import surport.supportServer.member.entity.Member
 import surport.supportServer.member.entity.MemberRole
-import surport.supportServer.member.entity.RefreshToken
-//import surport.supportServer.member.repository.MailRepository
+import surport.supportServer.member.repository.MemberRepository
 import surport.supportServer.member.repository.MemberRoleRepository
-import java.time.Duration
-import java.time.LocalDateTime
 
 @Transactional
 @Service
@@ -33,7 +28,6 @@ class MemberService(
     private val authenticationManagerBuilder: AuthenticationManagerBuilder,
     private val jwtTokenProvider: JwtTokenProvider,
     private val mailUtility: MailUtility,
-//    private val mailRepository: MailRepository,
     private val refreshTokenIngoRepository: RefreshTokenIngoRepositoryRedis,
     private val mailRepositoryRedis: MailRepositoryRedis
 
@@ -83,7 +77,7 @@ class MemberService(
 
         memberRepository.save(member)
 
-        val memberRole: MemberRole = MemberRole(null, ROLE.MEMBER, member)
+        val memberRole = MemberRole(null, ROLE.MEMBER, member)
         memberRoleRepository.save(memberRole)
 
         return "회원가입이 완료 되었습니다."
@@ -94,19 +88,17 @@ class MemberService(
      */
     fun login(loginDto: LoginDto): TokenInfo{
         //암호화된 비밀번호와의 대조
-        var member: Member = memberRepository.findByLoginId(loginDto.loginId)
+        val member: Member = memberRepository.findByLoginId(loginDto.loginId)
             ?: throw InvalidInputException(ResultCode.LOGIN_ERROR.statusCode,ResultCode.LOGIN_ERROR.message, ResultCode.LOGIN_ERROR.code)
         val encoder = SCryptPasswordEncoder(16,8,1,32,64)
         if(!encoder.matches(loginDto.password,member.password)){
             throw InvalidInputException(ResultCode.LOGIN_ERROR.statusCode, ResultCode.LOGIN_ERROR.message ,ResultCode.LOGIN_ERROR.code)
         }
 
-        val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member?.password)
+        val authenticationToken = UsernamePasswordAuthenticationToken(loginDto.loginId, member.password)
         val authentication = authenticationManagerBuilder.`object`.authenticate(authenticationToken)
         val createToken: TokenInfo = jwtTokenProvider.createToken(authentication)
-        val timeout =  jwtTokenProvider.getTimeoutFromRefreshToken(createToken.refreshToken)
         val userId = member.id!!
-        val refreshToken =RefreshToken(null,userId, createToken.refreshToken, timeout)
 
         refreshTokenIngoRepository.save(userId,createToken.refreshToken)
 
@@ -128,14 +120,8 @@ class MemberService(
             ?: throw InvalidInputException(ResultCode.TOKEN_EXPIRED.statusCode, ResultCode.TOKEN_EXPIRED.message, ResultCode.TOKEN_EXPIRED.message)
 
         val newTokenInfo: TokenInfo = jwtTokenProvider.validateRefreshTokenAndCreateToken(refreshToken)
-
         refreshTokenIngoRepository.deleteByRefreshToken(refreshToken)
-
         val userId:Long = jwtTokenProvider.getUserIdFromRefreshToken(refreshToken)
-        val timeout =  jwtTokenProvider.getTimeoutFromRefreshToken(newTokenInfo.refreshToken)
-
-        val refreshToken =RefreshToken(null,userId, newTokenInfo.refreshToken, timeout)
-
         refreshTokenIngoRepository.save(userId,newTokenInfo.refreshToken)
 
         return newTokenInfo
@@ -163,7 +149,7 @@ class MemberService(
         memberUpdateDto.roomNo?.let { existingMember.roomNo = it }
 
         memberRepository.save(existingMember)
-        return "정보가 성공적으로 업데이트되었습니다."
+        return "정보가 성공적으로 업데이트 되었습니다."
     }
     /**
      * 비밀 번호 변경

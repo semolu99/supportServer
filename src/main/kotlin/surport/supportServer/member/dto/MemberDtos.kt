@@ -16,6 +16,9 @@ data class MemberDtoRequest(
     var id: Long?,
 
     @field:NotBlank
+    @field:Pattern(
+        regexp = "^.{3,30}"
+    )
     @JsonProperty("loginId")
     private val _loginId: String?,
 
@@ -32,13 +35,13 @@ data class MemberDtoRequest(
     private val _nickname: String?,
 
     @field:NotBlank
-    @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMAN 중 하나를 선택 해 주세요.")
+    @field:ValidEnum(enumClass = Gender::class)
     @JsonProperty("gender")
     private val _gender: String?,
 
     @field:NotBlank
     @JsonProperty("dormType")
-    @field:ValidEnum(enumClass = Dorm_type::class, message = "알맞은 값을 선택 해 주세요.")
+    @field:ValidEnum(enumClass = Dorm_type::class)
     private val _dormType: String?,
 
     @field:NotNull
@@ -96,11 +99,22 @@ data class MemberDtoResponse(
 
 data class PasswordChangeDto(
     @field:NotBlank(message = "현재 비밀번호를 입력해 주세요")
-    val currentPassword: String,
+    @JsonProperty("currentPassword")
+    private val _currentPassword: String?,
 
-    @field:NotBlank(message = "새 비밀번호를 입력해 주세요")
-    val newPassword: String
-)
+    @field:NotBlank
+    @field:Pattern(
+        regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{8,20}\$"
+    )
+    @JsonProperty("newPassword")
+    private val _newPassword: String?
+){
+    val currentPassword : String
+        get() = _currentPassword!!
+
+    val newPassword : String
+        get() = _newPassword!!
+}
 
 data class MemberUpdateDto(
     var id: Long,

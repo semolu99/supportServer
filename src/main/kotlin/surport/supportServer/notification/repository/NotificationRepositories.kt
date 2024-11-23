@@ -24,4 +24,6 @@ interface NoticeRepository : JpaRepository<Notification, Long>{
     fun findAllNotificationListDtoResponse(): List<NotificationListDtoResponse>?
 
     fun deleteById(id: Long?)
+
+    fun findNotificationById(id:Long):Notification?
 }

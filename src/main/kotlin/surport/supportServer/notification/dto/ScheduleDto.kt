@@ -3,6 +3,7 @@ package surport.supportServer.notification.dto
 import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
+import jakarta.validation.constraints.Size
 import surport.supportServer.notification.entity.Notification
 import surport.supportServer.notification.entity.Schedule
 import java.time.LocalDate

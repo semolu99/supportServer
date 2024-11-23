@@ -1,14 +1,11 @@
 package surport.supportServer.member.entity
 
-import surport.supportServer.common.status.Dorm_type
-import surport.supportServer.common.status.Gender
 import jakarta.persistence.*
 import jakarta.validation.constraints.Min
+import surport.supportServer.common.status.Dorm_type
+import surport.supportServer.common.status.Gender
 import surport.supportServer.common.status.ROLE
 import surport.supportServer.member.dto.MemberDtoResponse
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.util.Date
 
 @Entity
 @Table(
@@ -63,37 +60,4 @@ class MemberRole(
     @ManyToOne(fetch = FetchType.LAZY) //다대일
     @JoinColumn(foreignKey = ForeignKey(name = "fk_user_role_member_id"))
     val member: Member
-)
-
-//@Entity
-//class Mail(
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    val id: Long? = null,
-//
-//    @Column(nullable = false)
-//    var loginId: String,
-//
-//    @Column(nullable = false)
-//    var authCode: String,
-//
-//    @Column(nullable = false)
-//    var sendDate: LocalDateTime
-//)
-
-@Entity
-class RefreshToken(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
-
-    @Column(nullable = false)
-    val userId: Long,
-
-    @Column(nullable = false)
-    val refreshToken: String,
-
-    @Column(nullable = false)
-    val timeout: Date
-
 )
