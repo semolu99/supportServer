@@ -55,6 +55,14 @@ class NotificationService(
         return notification.toDto()
     }
     /**
+     * 특정 공지 수정
+     */
+    fun putNotification(notificationDto: NotificationDto):String{
+        val notification = notificationDto.toEntity()
+        noticeRepository.save(notification)
+        return "정상 작동"
+    }
+    /**
      * 공지 전체 리스트 꺼내기
      */
     fun getNotificationList(): List<NotificationListDtoResponse> {

@@ -93,13 +93,6 @@ data class NotificationDto(
     @JsonProperty("content")
     private val _content: String?,
 
-    @field:NotBlank
-    @field:Pattern(
-        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
-        message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
-    )
-    @JsonProperty("creationDate")
-    private val _creationDate: String?,
 ){
     val title:String
         get() = _title!!
@@ -107,14 +100,13 @@ data class NotificationDto(
     val content:String
         get() = _content!!
 
-    val creationDate:LocalDate
-        get() = _creationDate!!.toLocalDate()
-
+    private val now = LocalDate.now().toString()
     private fun String.toLocalDate():LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
     fun toEntity(): Notification =
-        Notification(id, title, content, creationDate)
+        Notification(id, title, content, now.toLocalDate())
+
 }
 
 data class NotificationDtoResponse(
