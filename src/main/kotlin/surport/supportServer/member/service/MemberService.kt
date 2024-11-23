@@ -30,8 +30,8 @@ class MemberService(
     private val mailUtility: MailUtility,
     private val refreshTokenIngoRepository: RefreshTokenIngoRepositoryRedis,
     private val mailRepositoryRedis: MailRepositoryRedis
-
     ) {
+    private val notMailChecked = ResultCode.NOT_MAIL_CHECKED
     /**
      * 이메일 인증
      */
@@ -58,6 +58,7 @@ class MemberService(
             throw InvalidInputException(ResultCode.MAIL_ERROR.statusCode,ResultCode.MAIL_ERROR.message, ResultCode.MAIL_ERROR.code)
         }
         mailRepositoryRedis.deleteMailByLoginId(loginId)
+        mailRepositoryRedis.saveChecked(loginId)
         return "정상 확인 되었습니다"
     }
 
@@ -67,6 +68,10 @@ class MemberService(
      * 회원가입
      */
     fun signUp(memberDtoRequest: MemberDtoRequest):String {
+        val checked = mailRepositoryRedis.findByMailChecked(memberDtoRequest.loginId)
+        if (checked != "Checked"){
+            throw InvalidInputException(notMailChecked.statusCode,notMailChecked.message, notMailChecked.code)
+        }
         var member: Member? = memberRepository.findByLoginId(memberDtoRequest.loginId)
         if (member != null) {
             throw InvalidInputException(ResultCode.DUPLICATION_ID.statusCode,ResultCode.DUPLICATION_ID.message, ResultCode.DUPLICATION_ID.code)

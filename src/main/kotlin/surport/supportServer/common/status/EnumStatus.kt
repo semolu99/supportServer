@@ -41,6 +41,7 @@ enum class ResultCode(val statusCode: Int,val code: String, val message: String)
     PASSWORD_ERROR(HttpStatus.BAD_REQUEST.value(), "ERR112", "현재 비밀 번호가 맞지 않습니다."),
     NOT_FIND_ID(HttpStatus.NOT_FOUND.value(),"ERR113","존재 하지 않은 아이디 입니다."),
     NOT_MEMBER(HttpStatus.NOT_FOUND.value(), "ERR114", "회원 정보를 찾을 수 없습니다."),
+    NOT_MAIL_CHECKED(HttpStatus.NOT_FOUND.value(),"ERR115","메일 인증이 되어 있지 않습니다."),
     //notification
     WRONG_FORMAT_TITLE(HttpStatus.BAD_REQUEST.value(),"ERR151", "제목을 형식에 맞게 작성해 주세요."),
     WRONG_FORMAT_CONTENT(HttpStatus.BAD_REQUEST.value(),"ERR152", "내용을 형식에 맞게 작성해 주세요."),

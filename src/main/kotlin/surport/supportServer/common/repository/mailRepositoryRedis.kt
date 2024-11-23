@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit
 @Repository
 class MailRepositoryRedis(
     private val mailRedisTemplate: RedisTemplate<String, String>,
-    private val checkedRedisTemplate : RedisTemplate<String, Boolean>
+    private val checkedRedisTemplate : RedisTemplate<String, String>
 ) {
     companion object{
         private const val KEY_PREFIX = "mail"
@@ -20,7 +20,7 @@ class MailRepositoryRedis(
     }
 
     fun saveChecked(loginId: String){
-        val checked = false
+        val checked = "Checked"
         checkedRedisTemplate.opsForValue().set(loginId, checked, timeOutMailChecked, TimeUnit.MILLISECONDS)
     }
 
@@ -28,6 +28,11 @@ class MailRepositoryRedis(
         //val key = redisTemplate.keys("$KEY_PREFIX:*:$mailCode").firstOrNull()
         val key = mailRedisTemplate.keys(loginId).firstOrNull()
         return key?.let { mailRedisTemplate.opsForValue().get(it) }
+    }
+
+    fun findByMailChecked(loginId: String):String?{
+        val key = mailRedisTemplate.keys(loginId).firstOrNull()
+        return key?.let { checkedRedisTemplate.opsForValue().get(it) }
     }
 
     fun deleteMailByLoginId(loginId: String){
@@ -38,7 +43,7 @@ class MailRepositoryRedis(
 
     fun deleteCheckByLoginId(loginId: String){
         val key = mailRedisTemplate.keys(loginId)
-        mailRedisTemplate.delete(key)
+        checkedRedisTemplate.delete(key)
     }
 
 }

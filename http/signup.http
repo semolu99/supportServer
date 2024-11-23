@@ -12,14 +12,14 @@ Content-Type: application/json
 
 {
   "loginId": "barbo9510",
-  "authCode": "7ecc41"
+  "authCode": "5b3b21"
 }
 ###회원가입
 POST localhost:8080/member/signup
 Content-Type: application/json
 
 {
-  "loginId":"210181075",
+  "loginId":"barbo9510",
   "password": "qwer1234*",
   "nickname":"수원대행정실",
   "gender":"MAN",
