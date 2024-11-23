@@ -47,7 +47,7 @@ enum class ResultCode(val statusCode: Int,val code: String, val message: String)
     WRONG_FORMAT_CONTENT(HttpStatus.BAD_REQUEST.value(),"ERR152", "내용을 형식에 맞게 작성해 주세요."),
     WRONG_FORMAT_START_DATE(HttpStatus.BAD_REQUEST.value(),"ERR153", "시작 날짜를 형식에 맞게 작성해 주세요."),
     WRONG_FORMAT_END_DATE(HttpStatus.BAD_REQUEST.value(),"ERR154", "종료 날짜을 형식에 맞게 작성 주세요."),
-    WRONG_FORMAT_CREATION_DATE(HttpStatus.BAD_REQUEST.value(),"ERR155", "생성 일을 형식에 맞게 작성해 주세요.."), // 안쓸 가능성 존재
+    WRONG_FORMAT_CREATION_DATE(HttpStatus.BAD_REQUEST.value(),"ERR155", "생성 일을 형식에 맞게 작성해 주세요."), // 안쓸 가능성 존재
     NOT_FIND_SCHEDULE(HttpStatus.NOT_FOUND.value(), "ERR156","스케줄을 찾을 수 없습니다."), // 403
     NOT_FIND_NOTIFICATION(HttpStatus.NOT_FOUND.value(), "ERR157","공지사항을 찾을 수 없습니다."),
     WRONG_FORMAT_COLOR(HttpStatus.NOT_FOUND.value(), "ERR158","색상을 찾을 수 없습니다."),

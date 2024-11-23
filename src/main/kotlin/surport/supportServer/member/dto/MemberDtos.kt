@@ -39,9 +39,6 @@ data class MemberDtoRequest(
 
     @field:NotBlank
     @field:ValidEnum(enumClass = Gender::class)
-    @field:Pattern(
-        regexp = "^.{3,5}"
-    )
     @JsonProperty("gender")
     private val _gender: String?,
 
@@ -139,9 +136,6 @@ data class MemberUpdateDto(
     private val _nickname: String?,
 
     @field:NotBlank
-    @field:Pattern(
-        regexp = "^.{3,5}"
-    )
     @field:ValidEnum(enumClass = Gender::class, message = "MAN 이나 WOMEN 중 하나를 선택 해 주세요.")
     @JsonProperty("gender")
     private val _gender: String?,

@@ -109,7 +109,7 @@ class CustomExceptionHandler {
         //val pat
         return when (fieldError.code) {
 
-            "NotBlank", "Pattern" ,"ValidEnum", "Max", "Min"-> when (fieldError.field) {
+            "NotBlank", "Pattern", "ValidEnum", "Max", "Min", "NotNull" -> when (fieldError.field) {
                 "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
                 "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
                 "_nickname" -> ResultCode.WRONG_FORMAT_NICKNAME

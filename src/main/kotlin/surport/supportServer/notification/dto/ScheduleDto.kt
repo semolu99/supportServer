@@ -26,24 +26,23 @@ data class ScheduleDto(
 
     @field:NotBlank
     @field:Pattern(
-        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
-        message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
+        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
     )
     @JsonProperty("startDate")
     private val _startDate: String?,
 
     @field:NotBlank
     @field:Pattern(
-        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
-        message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
+        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
     )
     @JsonProperty("endDate")
     private val _endDate: String?,
 
+    @NotBlank
     @field:Min(value = 1, message = "색상 값은 1 이상이어야 합니다.")
     @field:Max(value = 5, message = "색상 값은 5 이하이어야 합니다.")
     @JsonProperty("color")
-    private val _color: Int?,
+    private val _color: String? ="6",
 ){
     val title:String
         get()=_title!!
@@ -58,7 +57,7 @@ data class ScheduleDto(
         get()=_endDate!!.toLocalDate()
 
     val color:Int
-        get() = _color!!
+        get() = _color!!.toInt()
 
     private fun String.toLocalDate():LocalDate =
         LocalDate.parse(this, DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -93,7 +92,7 @@ data class NotificationDto(
     @JsonProperty("content")
     private val _content: String?,
 
-    @field:NotBlank
+    @field:NotBlank(message = "날짜를 입력해주세요.")
     @field:Pattern(
         regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
         message = "날짜 형식(YYYY-MM-DD)을 확인해주세요"
