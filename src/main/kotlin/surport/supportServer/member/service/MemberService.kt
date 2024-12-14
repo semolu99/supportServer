@@ -150,8 +150,6 @@ class MemberService(
         memberUpdateDto.nickname?.let { existingMember.nickname = it }
         memberUpdateDto.gender?.let { existingMember.gender = it }
         memberUpdateDto.dormType?.let { existingMember.dormType = it }
-        memberUpdateDto.dormNo?.let { existingMember.dormNo = it }
-        memberUpdateDto.roomNo?.let { existingMember.roomNo = it }
 
         memberRepository.save(existingMember)
         return "정보가 성공적으로 업데이트 되었습니다."
@@ -192,7 +190,7 @@ class MemberService(
         val member = memberRepository.findByIdOrNull(userId)
             ?: throw InvalidInputException(ResultCode.INVALID_ACCESS_TOKEN.statusCode,ResultCode.INVALID_ACCESS_TOKEN.message,ResultCode.INVALID_ACCESS_TOKEN.code)
         memberRoleRepository.deleteByMember(member)
-        memberRepository.deleteByLoginId(member!!.loginId)
+        memberRepository.deleteByLoginId(member.loginId)
         refreshTokenIngoRepository.deleteByUserId(userId)
 
         return "성공적으로 탈퇴 되었습니다."

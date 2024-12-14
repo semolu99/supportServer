@@ -17,7 +17,7 @@ class MailUtility(
     private val memberRepository: MemberRepository,
 ) {
     fun mailmaker(loginId:String): String {
-        return "${loginId}@icloud.com"
+        return "${loginId}@suwon.ac.kr"
     }
     fun getRandomString(): String {
         val length = 6
@@ -59,7 +59,7 @@ class MailUtility(
     fun sendPassword(loginId : String):String{
         val newPassword = getTempPassword()
         val title = "[Support] 임시 비밀번호 발급"
-        val content = "SUPPORT 임시 비밀번호 발급<br><h2>임시 비밀번호 : ${newPassword}</h2>보안을 위해 바로 비밀번호를 변경 해주세요.<br>이용 해 주셔서 감사합니다"
+        val content = "SUPPORT 임시 비밀번호 발급<br><h2>임시 비밀번호 : ${newPassword}</h2>보안을 위해 바로 비밀번호를 변경 해 주세요.<br>이용 해 주셔서 감사합니다"
 
         val mimeMessage = mailSender.createMimeMessage()
         val mimeMessageHelper = MimeMessageHelper(mimeMessage, false, "UTF-8")

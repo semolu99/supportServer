@@ -32,19 +32,12 @@ class Member(
     @Column(nullable = false, length = 6)
     @Enumerated(EnumType.STRING)
     var dormType: Dorm_type,
-
-    @Column(nullable = false)
-    @Min(value = 1)
-    var dormNo: Int,
-
-    @Column(nullable = true)
-    var roomNo: Int? = null,
 ) {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
     val memberRole: List<MemberRole>? = null
 
     fun toDto(): MemberDtoResponse =
-        MemberDtoResponse(id!!, loginId, nickname, gender.desc, dormType.desc, dormNo, roomNo)
+        MemberDtoResponse(id!!, loginId, nickname, gender.desc, dormType.desc)
 }
 
 @Entity

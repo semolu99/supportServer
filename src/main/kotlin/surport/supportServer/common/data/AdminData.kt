@@ -35,7 +35,7 @@ class AdminData(
             val encodedPassword = encoder.encode(password)
 
             // ADMIN 멤버 생성
-            val adminMember = Member(null, loginId,encodedPassword,"Admin",Gender.MAN, Dorm_type.GounA,1, 1)
+            val adminMember = Member(null, loginId,encodedPassword,"Admin",Gender.MAN, Dorm_type.GounA)
             val adminRole = MemberRole(null,ROLE.ADMIN, adminMember)
             memberRepository.save(adminMember)
             memberRoleRepository.save(adminRole)

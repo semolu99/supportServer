@@ -24,7 +24,7 @@ data class MemberDtoRequest(
 
     @field:NotBlank
     @field:Pattern(
-        regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[a-zA-Z0-9!@#\$%^&*]{8,20}\$",
+        regexp="^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()\\-=+\\[\\]{};:'\",<.>/?|])[a-zA-Z0-9~!@#$%^&*()\\-=+\\[\\]{};:'\",<.>/?|]{8,20}$",
     )
     @JsonProperty("password")
     private val _password: String?,
@@ -46,12 +46,6 @@ data class MemberDtoRequest(
     @field:ValidEnum(enumClass = Dorm_type::class)
     private val _dormType: String?,
 
-    @field:NotBlank
-    @JsonProperty("dormNo")
-    private val _dormNo: String?,
-
-    @JsonProperty("roomNo")
-    private val _roomNo: Int?,
 ){
     val encoder = SCryptPasswordEncoder(16,8,1,32,64)
 
@@ -65,13 +59,9 @@ data class MemberDtoRequest(
         get() = Gender.valueOf(_gender!!)
     val dormType: Dorm_type
         get() = Dorm_type.valueOf(_dormType!!)
-    val dormNo: Int
-        get() = _dormNo!!.toInt()
-    val roomNo: Int
-        get() = _roomNo?.coerceIn(1, 3) ?: 0
 
     fun toEntity(): Member =
-        Member(id, loginId,password,nickname,gender, dormType, dormNo, roomNo)
+        Member(id, loginId,password,nickname,gender, dormType)
 }
 
 data class LoginDto(
@@ -98,8 +88,6 @@ data class MemberDtoResponse(
     val nickname: String,
     val gender: String,
     val dormType: String,
-    val dormNo: Int,
-    val roomNo: Int?,
 )
 
 data class PasswordChangeDto(
@@ -143,13 +131,6 @@ data class MemberUpdateDto(
     @field:ValidEnum(enumClass = Dorm_type::class)
     @JsonProperty("dormType")
     private val _dormType: String?,
-
-    @field:NotNull
-    @JsonProperty("dormNo")
-    private val _dormNo: Int?,
-
-    @JsonProperty("roomNo")
-    private val _roomNo: Int?,
 ) {
     val nickname: String?
         get() = _nickname
@@ -157,10 +138,6 @@ data class MemberUpdateDto(
         get() = _gender?.let { Gender.valueOf(it) }
     val dormType: Dorm_type?
         get() = _dormType?.let { Dorm_type.valueOf(it) }
-    val dormNo: Int?
-        get() = _dormNo
-    val roomNo: Int?
-        get() = _roomNo?.coerceIn(1, 3) ?: 0
 }
 
 data class MailDto(
