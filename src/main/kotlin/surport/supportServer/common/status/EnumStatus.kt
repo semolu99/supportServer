@@ -8,17 +8,13 @@ enum class Gender(val desc: String) {
 }
 
 enum class Dorm_type(val desc: String){
-    GounA("고운A"),
-    GounB("고운B"),
-    GounC("고운C"),
-    GyungM11("경상11"),
-    GyungM12("경상12"),
-    GyungM13("경상13"),
-    GyungM14("경상14"),
-    GyungW11("경상11"),
-    GyungW12("경상12"),
-    GyungW13("경상13"),
-    GyungW14("경상14"),
+    GounA("GounA"),
+    GounB("GounB"),
+    GounC("GounC"),
+    Gyung11("Gyung11"),
+    Gyung12("Gyung12"),
+    Gyung13("Gyung13"),
+    Gyung14("Gyung14"),
 }
 
 enum class ResultCode(val statusCode: Int,val code: String, val message: String) {
