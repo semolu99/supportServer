@@ -125,9 +125,6 @@ data class MemberUpdateDto(
     private val _gender: String?,
 
     @field:NotBlank
-    @field:Pattern(
-        regexp = "^.{3,6}"
-    )
     @field:ValidEnum(enumClass = Dorm_type::class)
     @JsonProperty("dormType")
     private val _dormType: String?,

@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "loginId": "barbo9510",
-  "authCode": "29c3ca"
+  "authCode": "ba7da8"
 }
 ###회원가입
 POST localhost:8080/member/signup
@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
   "loginId":"barbo9510",
-  "password": "qwer1234",
+  "password": "qwer1234!",
   "nickname":"수원대행정실",
   "gender":"MAN",
   "dormType":"GounA"
@@ -31,8 +31,8 @@ POST localhost:8080/member/login
 Content-Type: application/json
 
 {
-  "loginId":"21018107",
-  "password":"qwer1234*"
+  "loginId":"barbo9510",
+  "password":"qwer1234!"
 }
 > {%
  client.global.set("acToken",response.body.data.accessToken);
@@ -74,7 +74,7 @@ Authorization: Bearer {{acToken}}
 {
   "nickname":"수원대행정실",
   "gender":"WOMAN",
-  "dormType":"GyungM",
+  "dormType":"Gyung11",
   "dormNo":876,
   "roomNo": null
 }
