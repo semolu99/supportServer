@@ -12,7 +12,7 @@ Content-Type: application/json
 
 {
   "loginId": "barbo9510",
-  "authCode": "ba7da8"
+  "authCode": "fa8073"
 }
 ###회원가입
 POST localhost:8080/member/signup
@@ -78,4 +78,10 @@ Authorization: Bearer {{acToken}}
   "dormNo":876,
   "roomNo": null
 }
-###
+### 토큰 재발급
+POST localhost:8080/member/token/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiYXJibzk1MTAiLCJhdXRoIjoiUk9MRV9NRU1CRVIiLCJ1c2VySWQiOjIsImlhdCI6MTczNjM0NjU5MiwiZXhwIjoxNzM4NDIwMTkyfQ.hW4Bs0xCBtCEEKoAHO4QSYV1UVGCuDI5HvWMT4acnfw"
+}

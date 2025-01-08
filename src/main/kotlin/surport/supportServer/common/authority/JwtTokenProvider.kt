@@ -63,6 +63,8 @@ class JwtTokenProvider {
             .expiration(refreshExpiration)
             .signWith(refreshKey, Jwts.SIG.HS256)
             .compact()
+        println("**"+accessExpiration)
+        println("**"+refreshExpiration)
 
         return TokenInfo("Bearer",accessToken, refreshToken)
     }

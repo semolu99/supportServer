@@ -36,6 +36,7 @@ class SecurityConfig(
                     "/member/mailcheck",
                     "/member/mail/find",
                     "/member/test",
+                    "member/token/refresh"
                 ).anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
                     .requestMatchers(
