@@ -3,8 +3,8 @@ package surport.supportServer.common.status
 import org.springframework.http.HttpStatus
 
 enum class Gender(val desc: String) {
-    MAN("남"),
-    WOMAN("여")
+    MAN("MAN"),
+    WOMAN("WOMAN")
 }
 
 enum class Dorm_type(val desc: String){
