@@ -120,15 +120,9 @@ data class NotificationDto(
 
 }
 
-data class NotificationDtoResponse(
-    val id:Long,
-    val title:String,
-    val content:String,
-    val creationDate:LocalDate
-)
-
 data class NotificationListDtoResponse(
     val id:Long,
     val title:String,
+    val content:String,
     val creationDate:LocalDate
 )

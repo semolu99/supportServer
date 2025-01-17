@@ -1,7 +1,6 @@
 package surport.supportServer.notification.entity
 
 import jakarta.persistence.*
-import surport.supportServer.notification.dto.NotificationDtoResponse
 import surport.supportServer.notification.dto.NotificationListDtoResponse
 import surport.supportServer.notification.dto.ScheduleDtoResponse
 import java.time.LocalDate
@@ -51,9 +50,7 @@ class Notification(
     @Temporal(TemporalType.DATE)
     val creationDate: LocalDate,
 ) {
-    fun toDto(): NotificationDtoResponse =  // 수정된 부분
-        NotificationDtoResponse(id!!, title, content, creationDate)
     fun toList(): NotificationListDtoResponse =
-        NotificationListDtoResponse(id!!, title, creationDate)
+        NotificationListDtoResponse(id!!, title, content, creationDate)
 }
 

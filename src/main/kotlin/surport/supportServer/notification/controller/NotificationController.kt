@@ -48,15 +48,6 @@ class NotificationController(
         val result = notificationService.addNotification(notificationDto)
         return BaseResponse(statusMessage = result)
     }
-    /**
-     * 특정 공지 꺼내기
-     */
-
-    @GetMapping("/notification/{id}")
-    fun getNotification(@PathVariable id: Long): BaseResponse<NotificationDtoResponse> {
-        val result = notificationService.getNotification(id)
-        return BaseResponse(data = result, statusMessage = "정상 작동")
-    }
 
     /**
      * 특적 공지 수정

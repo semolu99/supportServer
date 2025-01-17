@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service
 import surport.supportServer.common.exception.InvalidInputException
 import surport.supportServer.common.status.ResultCode
 import surport.supportServer.notification.dto.NotificationDto
-import surport.supportServer.notification.dto.NotificationDtoResponse
 import surport.supportServer.notification.dto.NotificationListDtoResponse
 import surport.supportServer.notification.dto.ScheduleDtoResponse
 import surport.supportServer.notification.entity.Notification
@@ -47,14 +46,6 @@ class NotificationService(
             ?: throw InvalidInputException(ResultCode.NOT_FIND_SCHEDULE.statusCode,ResultCode.NOT_FIND_SCHEDULE.message,ResultCode.NOT_FIND_SCHEDULE.code)
     }
 
-    /**
-     * 특정 공지 꺼내기
-     */
-    fun getNotification(id: Long): NotificationDtoResponse{
-        val notification = noticeRepository.findAllById(id)
-            ?: throw InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode,ResultCode.NOT_FIND_NOTIFICATION.message,ResultCode.NOT_FIND_NOTIFICATION.code)
-        return notification.toDto()
-    }
     /**
      * 특정 공지 수정
      */
