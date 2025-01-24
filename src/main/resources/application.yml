@@ -57,7 +57,6 @@ logging:
     org:
       hibernate:
         type.descriptor.sql: trace
-        SQL: debug
       springframework:
         mail: debug
 jwt:
