@@ -97,13 +97,6 @@ data class NotificationDto(
     )
     @JsonProperty("content")
     private val _content: String?,
-
-    @field:NotBlank
-    @field:Pattern(
-        regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$",
-    )
-    @JsonProperty("creationDate")
-    private val _creationDate: String?,
 ){
     val title:String
         get() = _title!!
@@ -117,7 +110,6 @@ data class NotificationDto(
 
     fun toEntity(): Notification =
         Notification(id, title, content, now.toLocalDate())
-
 }
 
 data class NotificationListDtoResponse(
