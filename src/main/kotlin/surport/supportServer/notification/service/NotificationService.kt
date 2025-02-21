@@ -29,6 +29,23 @@ class NotificationService(
         return "정상 작동"
     }
 
+    /*
+     * 특정 스케줄 수정
+     */
+    fun putSchedule(id: Long, scheduleDto: ScheduleDto): String{
+        val existingSchedule = scheduleRepository.findById(id)
+            .orElseThrow { InvalidInputException(ResultCode.NOT_MEMBER.statusCode, "($id) 가 존재하지 않는 스케줄입니다.", ResultCode.NOT_FIND_SCHEDULE.code) }
+
+        scheduleDto.title?.let { existingSchedule.title = it }
+        scheduleDto.content?.let { existingSchedule.content = it }
+        scheduleDto.startDate?.let { existingSchedule.startDate = it }
+        scheduleDto.endDate?.let { existingSchedule.endDate = it }
+        scheduleDto.color?.let { existingSchedule.color = it }
+
+        scheduleRepository.save(existingSchedule)
+
+        return "정상 작동"
+    }
     /**
      * 특정 스케줄 보기
      */
@@ -59,9 +76,14 @@ class NotificationService(
     /**
      * 특정 공지 수정
      */
-    fun putNotification(notificationDto: NotificationDto):String{
-        val notification = notificationDto.toEntity()
-        noticeRepository.save(notification)
+    fun putNotification(id: Long, notificationDto: NotificationDto):String{
+        val existingNotification = noticeRepository.findById(id)
+            .orElseThrow { InvalidInputException(ResultCode.NOT_MEMBER.statusCode, "($id) 가 존재하지 않는 공지사항입니다.", ResultCode.NOT_FIND_NOTIFICATION.code) }
+
+        notificationDto.title?.let { existingNotification.title = it }
+        notificationDto.content?.let { existingNotification.content = it }
+
+        noticeRepository.save(existingNotification)
         return "정상 작동"
     }
     /**

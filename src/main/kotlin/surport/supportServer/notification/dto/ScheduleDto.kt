@@ -17,34 +17,34 @@ data class ScheduleDto(
         regexp = "^.{1,100}"
     )
     @JsonProperty("title")
-    private val _title: String?,
+    private var _title: String?,
 
     @field:NotBlank
     @field:Pattern(
         regexp = "^.{1,1000}"
     )
     @JsonProperty("content")
-    private val _content: String?,
+    private var _content: String?,
 
     @field:NotBlank
     @field:Pattern(
         regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
     )
     @JsonProperty("startDate")
-    private val _startDate: String?,
+    private var _startDate: String?,
 
     @field:NotBlank
     @field:Pattern(
         regexp = "^([12]\\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01]))$"
     )
     @JsonProperty("endDate")
-    private val _endDate: String?,
+    private var _endDate: String?,
 
     @NotBlank
     @field:Min(value = 1)
     @field:Max(value = 5)
     @JsonProperty("color")
-    private val _color: String? ="6",
+    private var _color: String? ="6",
 ){
     val title:String
         get()=_title!!

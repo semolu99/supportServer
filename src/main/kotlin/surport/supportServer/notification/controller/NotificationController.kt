@@ -32,6 +32,14 @@ class NotificationController(
         return BaseResponse(data = result, statusMessage = "정상 작동")
     }
 
+    /*
+    * 특정 스케줄 수정
+     */
+    @PutMapping("/schedule/edit/{id}")
+    fun putSchedule(@PathVariable id:Long, @RequestBody @Valid scheduleDto:ScheduleDto):BaseResponse<Unit> {
+        val result = notificationService.putSchedule(id, scheduleDto)
+        return BaseResponse(statusMessage = result)
+    }
     /**
      * 스케줄 월별 리스트
      */
@@ -61,9 +69,9 @@ class NotificationController(
     /**
      * 특정 공지 수정
      */
-    @PutMapping("/notification/edit")
-    fun putNotification(@RequestBody @Valid notificationDto:NotificationDto):BaseResponse<Unit> {
-        val result = notificationService.putNotification(notificationDto)
+    @PutMapping("/notification/edit/{id}")
+    fun putNotification(@PathVariable id: Long, @RequestBody @Valid notificationDto:NotificationDto):BaseResponse<Unit> {
+        val result = notificationService.putNotification(id, notificationDto)
         return BaseResponse(statusMessage = result)
     }
     /**

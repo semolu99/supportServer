@@ -12,22 +12,22 @@ class Schedule(
     val id: Long? = null,
 
     @Column(nullable = false, length = 100)
-    val title: String,
+    var title: String,
 
     @Column(nullable = false, length = 1000)
-    val content: String,
+    var content: String,
 
     @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
-    val startDate: LocalDate,
+    var startDate: LocalDate,
 
     @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
-    val endDate: LocalDate,
+    var endDate: LocalDate,
 
     @Column(nullable = false, length = 1)
     @Temporal(TemporalType.DATE)
-    val color: Int,
+    var color: Int,
 ) {
     fun toDto(): ScheduleDtoResponse =
         ScheduleDtoResponse(id!!, title, content, startDate, endDate, color)
@@ -41,10 +41,10 @@ class Notification(
     val id: Long?= null,
 
     @Column(nullable = false, length = 100)
-    val title: String,
+    var title: String,
 
     @Column(nullable = false, length = 1000)
-    val content: String,
+    var content: String,
 
     @Column(nullable = false, length = 10)
     @Temporal(TemporalType.DATE)
