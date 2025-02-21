@@ -41,6 +41,15 @@ class NotificationController(
     }
 
     /**
+     *  스케줄 삭제
+     */
+    @DeleteMapping("/schedule/{id}/delete")
+    fun deleteSchedule(@PathVariable id: Long): BaseResponse<Unit> {
+        val result = notificationService.deleteSchedule(id);
+        return BaseResponse(statusMessage = result)
+    }
+
+    /**
      *  공지사항 작성
      */
     @PostMapping("/notification/add")
@@ -50,7 +59,7 @@ class NotificationController(
     }
 
     /**
-     * 특적 공지 수정
+     * 특정 공지 수정
      */
     @PutMapping("/notification/edit")
     fun putNotification(@RequestBody @Valid notificationDto:NotificationDto):BaseResponse<Unit> {

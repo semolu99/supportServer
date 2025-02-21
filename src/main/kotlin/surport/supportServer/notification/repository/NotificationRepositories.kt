@@ -14,6 +14,8 @@ interface ScheduleRepository : JpaRepository<Schedule, Long>{
     @Query("SELECT * FROM schedule e where e.id in (select notification_ids.id from(select i.id ,substring(i.start_date,1,7) as sd, substring(i.end_date ,1,7) as ed from schedule i) notification_ids where notification_ids.sd = :date or notification_ids.ed = :date)", nativeQuery = true)
     fun findAllByDate(date: String): List<Schedule>?
 
+    fun findScheduleById(id:Long):Schedule?
+
 }
 
 @Repository

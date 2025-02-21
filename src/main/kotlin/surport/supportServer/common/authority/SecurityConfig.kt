@@ -43,6 +43,7 @@ class SecurityConfig(
                         "/notification/add",
                         "/notification/edit",
                         "/notification/*/delete",
+                        "/schedule/*/delete",
                         "/schedule/add",
                     ).hasRole("ADMIN")
                     .anyRequest().permitAll()

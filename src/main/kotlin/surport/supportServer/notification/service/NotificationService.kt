@@ -47,6 +47,16 @@ class NotificationService(
     }
 
     /**
+     *  스케줄 삭제
+     */
+    fun deleteSchedule(id: Long): String{
+        val Schedule = scheduleRepository.findScheduleById(id)
+            ?: throw InvalidInputException(ResultCode.NOT_FIND_SCHEDULE.statusCode,ResultCode.NOT_FIND_SCHEDULE.code, ResultCode.NOT_FIND_SCHEDULE.message)
+        scheduleRepository.deleteById(id)
+        return "삭제 완료"
+    }
+
+    /**
      * 특정 공지 수정
      */
     fun putNotification(notificationDto: NotificationDto):String{
