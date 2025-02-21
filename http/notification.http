@@ -7,7 +7,7 @@ Authorization: Bearer {{adminToken}}
   "title":"제목입니다",
   "content":"내용입니다",
   "startDate":"2024-08-20",
-  "endDate":"2024-08-16",
+  "endDate":"2024-08-26",
   "color":4
 }
 ### 지정 스케줄 꺼내오기
@@ -15,6 +15,40 @@ GET localhost:8080/schedule/1
 
 ### 월별 스케줄 꺼내오기
 GET localhost:8080/schedule?date=2024-08
+
+### 특정 스케줄 수정
+PUT localhost:8080/schedule/4
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+{
+  "id": 4,
+  "title":"11제목입니다",
+  "content":"11내용입니다",
+  "startDate":"2024-08-20",
+  "endDate":"2024-08-26",
+  "color":2
+}
+
+### 특정 스케줄 수정(어드민X)
+PUT localhost:8080/schedule/4
+Content-Type: application/json
+
+{
+  "id": 4,
+  "title":"22제목입니다",
+  "content":"22내용입니다",
+  "startDate":"2024-08-20",
+  "endDate":"2024-08-26",
+  "color":2
+}
+
+###특정 스케줄 삭제
+DELETE localhost:8080/schedule/2
+Authorization: Bearer {{adminToken}}
+
+###특정 스케줄 삭제 어드민X
+DELETE localhost:8080/schedule/2
 
 ### 공지사항 작성
 POST localhost:8080/notification/add
@@ -27,19 +61,32 @@ Content-Type: application/json
 }
 ### 공지사항불러오기
 GET localhost:8080/notification
-### 지정 공지사항 꺼내오기
-GET localhost:8080/notification/2
+
 ### 공지사항 수정
-PUT localhost:8080/notification/edit
+PUT localhost:8080/notification/1
 Authorization: Bearer {{adminToken}}
 Content-Type: application/json
 
 {
-  "id": 2,
+  "id": 1,
+  "title": "aㅁㅁㅁasㅁㅁㅁㅁ",
+  "content": "ㅁㅁㅁㅁㅁasㅁㅁㅁㅁㅁㅁㅁㅁ"
+}
+
+### 공지사항 수정 어드민X
+PUT localhost:8080/notification/1
+Content-Type: application/json
+
+{
+  "id": 1,
   "title": "aㅁㅁㅁㅁㅁㅁㅁ",
   "content": "ㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁㅁ"
 }
+
 ### 공지사항 삭제
-DELETE localhost:8080/notification/2/delete
+DELETE localhost:8080/notification/1
 Authorization: Bearer {{adminToken}}
+
+### 공지사항 삭제 어드민X
+DELETE localhost:8080/notification/1
 ###

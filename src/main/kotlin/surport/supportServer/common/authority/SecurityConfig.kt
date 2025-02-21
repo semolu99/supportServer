@@ -2,6 +2,7 @@ package surport.supportServer.common.authority
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
@@ -29,6 +30,7 @@ class SecurityConfig(
             .csrf { it.disable() }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests{
+                it.requestMatchers(HttpMethod.GET, "/schedule/*").permitAll()
                 it.requestMatchers(
                     "/member/signup",
                     "/member/login",
@@ -36,14 +38,14 @@ class SecurityConfig(
                     "/member/mailcheck",
                     "/member/mail/find",
                     "/member/test",
-                    "member/token/refresh"
+                    "/member/token/refresh"
                 ).anonymous()
                     .requestMatchers("/member/**").hasAnyRole("MEMBER","ADMIN")
                     .requestMatchers(
                         "/notification/add",
                         "/notification/edit",
-                        "/notification/*/delete",
-                        "/schedule/*/delete",
+                        "/notification/*",
+                        "/schedule/*",
                         "/schedule/add",
                     ).hasRole("ADMIN")
                     .anyRequest().permitAll()

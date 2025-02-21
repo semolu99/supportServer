@@ -32,10 +32,10 @@ class NotificationController(
         return BaseResponse(data = result, statusMessage = "정상 작동")
     }
 
-    /*
+    /**
     * 특정 스케줄 수정
      */
-    @PutMapping("/schedule/edit/{id}")
+    @PutMapping("/schedule/{id}")
     fun putSchedule(@PathVariable id:Long, @RequestBody @Valid scheduleDto:ScheduleDto):BaseResponse<Unit> {
         val result = notificationService.putSchedule(id, scheduleDto)
         return BaseResponse(statusMessage = result)
@@ -51,7 +51,7 @@ class NotificationController(
     /**
      *  스케줄 삭제
      */
-    @DeleteMapping("/schedule/{id}/delete")
+    @DeleteMapping("/schedule/{id}")
     fun deleteSchedule(@PathVariable id: Long): BaseResponse<Unit> {
         val result = notificationService.deleteSchedule(id);
         return BaseResponse(statusMessage = result)
@@ -69,7 +69,7 @@ class NotificationController(
     /**
      * 특정 공지 수정
      */
-    @PutMapping("/notification/edit/{id}")
+    @PutMapping("/notification/{id}")
     fun putNotification(@PathVariable id: Long, @RequestBody @Valid notificationDto:NotificationDto):BaseResponse<Unit> {
         val result = notificationService.putNotification(id, notificationDto)
         return BaseResponse(statusMessage = result)
@@ -84,7 +84,7 @@ class NotificationController(
     /**
      *  공지사항 삭제
      */
-    @DeleteMapping("/notification/{id}/delete")
+    @DeleteMapping("/notification/{id}")
     fun deleteNotification(@PathVariable id: Long): BaseResponse<Unit> {
         val result = notificationService.deleteNotification(id);
         return BaseResponse(statusMessage = result)
