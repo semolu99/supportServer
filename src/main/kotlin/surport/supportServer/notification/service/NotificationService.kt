@@ -29,12 +29,12 @@ class NotificationService(
         return "정상 작동"
     }
 
-    /*
+    /**
      * 특정 스케줄 수정
      */
     fun putSchedule(id: Long, scheduleDto: ScheduleDto): String{
         val existingSchedule = scheduleRepository.findById(id)
-            .orElseThrow { InvalidInputException(ResultCode.NOT_MEMBER.statusCode, ResultCode.NOT_FIND_SCHEDULE.message, ResultCode.NOT_FIND_SCHEDULE.code) }
+            .orElseThrow { InvalidInputException(ResultCode.NOT_FIND_SCHEDULE.statusCode, ResultCode.NOT_FIND_SCHEDULE.message, ResultCode.NOT_FIND_SCHEDULE.code) }
 
         scheduleDto.title?.let { existingSchedule.title = it }
         scheduleDto.content?.let { existingSchedule.content = it }
@@ -78,7 +78,7 @@ class NotificationService(
      */
     fun putNotification(id: Long, notificationDto: NotificationDto):String{
         val existingNotification = noticeRepository.findById(id)
-            .orElseThrow { InvalidInputException(ResultCode.NOT_MEMBER.statusCode, ResultCode.NOT_FIND_NOTIFICATION.message, ResultCode.NOT_FIND_NOTIFICATION.code) }
+            .orElseThrow { InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode, ResultCode.NOT_FIND_NOTIFICATION.message, ResultCode.NOT_FIND_NOTIFICATION.code) }
 
         notificationDto.title?.let { existingNotification.title = it }
         notificationDto.content?.let { existingNotification.content = it }
