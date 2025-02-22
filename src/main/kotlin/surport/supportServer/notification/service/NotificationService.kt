@@ -68,7 +68,7 @@ class NotificationService(
      */
     fun deleteSchedule(id: Long): String{
         val Schedule = scheduleRepository.findScheduleById(id)
-            ?: throw InvalidInputException(ResultCode.NOT_FIND_SCHEDULE.statusCode,ResultCode.NOT_FIND_SCHEDULE.code, ResultCode.NOT_FIND_SCHEDULE.message)
+            ?: throw InvalidInputException(ResultCode.NOT_FIND_SCHEDULE.statusCode,ResultCode.NOT_FIND_SCHEDULE.message, ResultCode.NOT_FIND_SCHEDULE.code)
         scheduleRepository.deleteById(id)
         return "삭제 완료"
     }
@@ -91,8 +91,7 @@ class NotificationService(
      */
     fun getNotificationList(): List<NotificationListDtoResponse> {
         return noticeRepository.findAllNotificationListDtoResponse()
-            ?: throw InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode, ResultCode.NOT_FIND_NOTIFICATION.message, ResultCode.NOT_FIND_NOTIFICATION.code
-            )
+            ?: throw InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode, ResultCode.NOT_FIND_NOTIFICATION.message, ResultCode.NOT_FIND_NOTIFICATION.code)
     }
     /**
      *  공지사항 작성
@@ -107,7 +106,7 @@ class NotificationService(
      */
     fun deleteNotification(id: Long): String{
         val notification = noticeRepository.findNotificationById(id)
-            ?: throw InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode,ResultCode.NOT_FIND_NOTIFICATION.code, ResultCode.NOT_FIND_NOTIFICATION.message)
+            ?: throw InvalidInputException(ResultCode.NOT_FIND_NOTIFICATION.statusCode,ResultCode.NOT_FIND_NOTIFICATION.message, ResultCode.NOT_FIND_NOTIFICATION.code)
         noticeRepository.deleteById(id)
         return "삭제 완료"
     }

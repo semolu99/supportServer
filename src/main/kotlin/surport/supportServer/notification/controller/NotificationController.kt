@@ -3,6 +3,8 @@ package surport.supportServer.notification.controller
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 import surport.supportServer.common.dto.BaseResponse
+import surport.supportServer.common.exception.InvalidInputException
+import surport.supportServer.common.status.ResultCode
 import surport.supportServer.notification.dto.*
 import surport.supportServer.notification.dto.NotificationDto
 import surport.supportServer.notification.dto.ScheduleDto
@@ -44,7 +46,9 @@ class NotificationController(
      * 스케줄 월별 리스트
      */
     @GetMapping("/schedule")
-    fun getSchedule(@RequestParam date: String): BaseResponse<List<Schedule>> {
+    fun getSchedule(@RequestParam(required = false) date: String?): BaseResponse<List<Schedule>> {
+        if(date.isNullOrEmpty())
+            throw InvalidInputException(ResultCode.NOT_DATE.statusCode, ResultCode.NOT_DATE.message, ResultCode.NOT_DATE.code)
         return BaseResponse(data = notificationService.getMonthSchedule(date))
     }
 
