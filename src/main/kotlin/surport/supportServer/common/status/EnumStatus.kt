@@ -20,6 +20,7 @@ enum class Dorm_type(val desc: String){
 enum class ResultCode(val statusCode: Int,val code: String, val message: String) {
     //001 ~ 100 서버 환경
     //101 ~ 150 member
+    //151 ~ 200 notification
     //401 ~ 500 토큰, 메소드 오류
     SUCCESS(HttpStatus.OK.value(), "SUCCESS","성공"), // 200
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR.value(), "ERR001","서버 에러가 발생했습니다"), // 500
@@ -32,9 +33,7 @@ enum class ResultCode(val statusCode: Int,val code: String, val message: String)
     WRONG_FORMAT_LOGIN_ID(HttpStatus.BAD_REQUEST.value(), "ERR101","아이디를 형식에 맞게 작성해 주세요."),
     WRONG_FORMAT_PASSWORD(HttpStatus.BAD_REQUEST.value(),"ERR102","영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요."),
     WRONG_FORMAT_NICKNAME(HttpStatus.BAD_REQUEST.value(),"ERR103","닉네임을 형식에 맞게 작성해 주세요."),
-    WRONG_FORMAT_GENDER(HttpStatus.BAD_REQUEST.value(), "ERR104","성별을 형식에 맞게 작성해 주세요."),
     WRONG_FORMAT_DORM_TYPE(HttpStatus.BAD_REQUEST.value(),"ERR105","기숙사 유형을 선택해 주세요."),
-    WRONG_FORMAT_DORM_NUMBER(HttpStatus.BAD_REQUEST.value(),"ERR106","기숙사 호실를 입력해 주세요."),
     WRONG_FORMAT_CURRENT_PASSWORD(HttpStatus.BAD_REQUEST.value(),"ERR107","기존의 비밀번호를 입력해 주세요."),
     WRONG_FORMAT_NEW_PASSWORD(HttpStatus.BAD_REQUEST.value(),"ERR108","새로운 비밀 번호 : 영문, 숫자, 특수 문자를 포함한 8~20자리로 입력 해 주세요."),
     DUPLICATION_ID(HttpStatus.BAD_REQUEST.value(),"ERR109","중복된 아이디 입니다."),

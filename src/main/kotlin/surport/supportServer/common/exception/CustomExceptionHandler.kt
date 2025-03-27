@@ -111,9 +111,7 @@ class CustomExceptionHandler {
                 "_loginId" -> ResultCode.WRONG_FORMAT_LOGIN_ID
                 "_password" -> ResultCode.WRONG_FORMAT_PASSWORD
                 "_nickname" -> ResultCode.WRONG_FORMAT_NICKNAME
-                "_gender" -> ResultCode.WRONG_FORMAT_GENDER
                 "_dormType" -> ResultCode.WRONG_FORMAT_DORM_TYPE
-                "_dormNo" -> ResultCode.WRONG_FORMAT_DORM_NUMBER
                 "_currentPassword" -> ResultCode.WRONG_FORMAT_CURRENT_PASSWORD
                 "_newPassword" -> ResultCode.WRONG_FORMAT_NEW_PASSWORD
                 "_title" -> ResultCode.WRONG_FORMAT_TITLE

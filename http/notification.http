@@ -10,6 +10,18 @@ Authorization: Bearer {{adminToken}}
   "endDate":"2024-08-26",
   "color":4
 }
+
+### 스케줄 작성 어드민X
+POST localhost:8080/schedule/add
+Content-Type: application/json
+
+{
+  "title":"제목입니다",
+  "content":"내용입니다",
+  "startDate":"2024-08-20",
+  "endDate":"2024-08-26",
+  "color":4
+}
 ### 지정 스케줄 꺼내오기
 GET localhost:8080/schedule/1
 
@@ -57,7 +69,16 @@ Content-Type: application/json
 
 {
   "title":"제목",
-  "content":"내용"
+  "content":"내<br>용"
+}
+
+### 공지사항 작성 어드민 X
+POST localhost:8080/notification/add
+Content-Type: application/json
+
+{
+  "title":"제목",
+  "content":"내<br>용"
 }
 ### 공지사항불러오기
 GET localhost:8080/notification
@@ -70,7 +91,7 @@ Content-Type: application/json
 {
   "id": 1,
   "title": "aㅁㅁㅁasㅁㅁㅁㅁ",
-  "content": "ㅁㅁㅁㅁㅁasㅁㅁㅁㅁㅁㅁㅁㅁ"
+  "content": "ㅁㅁㅁㅁㅁasㅁㅁㅁ<br>ㅁㅁㅁㅁㅁ"
 }
 
 ### 공지사항 수정 어드민X
