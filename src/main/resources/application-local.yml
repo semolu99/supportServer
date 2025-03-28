@@ -1,4 +1,4 @@
-server:
+s`erver:
   port: 8080
   servlet:
     context-path: /
@@ -7,13 +7,17 @@ server:
       enabled: true
       force: true
 spring:
+  security:
+    user:
+      name: user
+      password: 1234
   application:
     name: support
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${db.url}
-    username: ${db.username}
-    password: ${db.password}
+    url: jdbc:mysql://localhost:3306/support_test?serverTimezone=Asia/Seoul
+    username: supportTester
+    password: Qwer1234*
   jpa:
     hibernate:
       ddl-auto: none
@@ -26,9 +30,9 @@ spring:
     open-in-view: true
   mail:
     host: smtp.naver.com
-    port: ${spring.mail.port}
-    username: ${spring.mail.username}
-    password: ${spring.mail.password}
+    port: 465
+    username: supportofficial@naver.com
+    password: XSSUF8781GJL
     properties:
       mail:
         smtp:
@@ -56,5 +60,5 @@ logging:
       springframework:
         mail: debug
 jwt:
-  access_secret: ${jwt.access_secret}
-  refresh_secret: ${mail.password}
+  access_secret: DadFufN4Oui8Bfv3ScFj6R9fyJ9hD45EdasdasaD6AGaF15waFAS1326SDFsXgFs
+  refresh_secret: 45EdasdasaD6AGaF15DadFufN4Oui8Bfv3ScFj6RwaFASD515sdasdASD5ASD515
